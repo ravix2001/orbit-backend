@@ -3,8 +3,6 @@ package com.ravi.orbit.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Entity
 @Getter
 @Setter
@@ -16,29 +14,36 @@ public class Cart {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "code", nullable = false, unique = true)
-    private String code;
+//    @Column(name = "code", nullable = false, unique = true)
+//    private String code;
+//
+//    @Column(name = "total_items")
+//    private int totalItems;
+//
+//    @Column(name = "market_price")
+//    private BigDecimal  marketPrice;
+//
+//    @Column(name = "discount_percent")
+//    private BigDecimal discountPercent;
+//
+//    @Column(name = "discount_amount")
+//    private BigDecimal discountAmount;
+//
+//    @Column(name = "selling_price")
+//    private BigDecimal sellingPrice;
 
-    @Column(name = "total_items")
-    private int totalItems;
-
-    @Column(name = "market_price")
-    private BigDecimal  marketPrice;
-
-    @Column(name = "discount_percent")
-    private BigDecimal discountPercent;
-
-    @Column(name = "discount_amount")
-    private BigDecimal discountAmount;
-
-    @Column(name = "selling_price")
-    private BigDecimal sellingPrice;
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
     @Column(name = "user_id", insertable = false, updatable = false)
     private Long userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
+
+    @Column(name = "product_id", insertable = false, updatable = false)
+    private Long productId;
 
 }

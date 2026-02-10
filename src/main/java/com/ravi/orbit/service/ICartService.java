@@ -1,21 +1,26 @@
 package com.ravi.orbit.service;
 
 import com.ravi.orbit.dto.CartDTO;
+import com.ravi.orbit.entity.Cart;
 
 import java.util.List;
 
 public interface ICartService {
 
-    CartDTO handleCart(CartDTO cartDTO);
+    void addToCart(Long userId, Long productId);
 
-    List<CartDTO> getAllCarts();
+    CartDTO getCartByUserId(Long userId);
 
-    CartDTO getCartDTOById(Long id);
+    void removeFromCart(Long userId, Long productId);
 
-    CartDTO getCartDTOByUserId(Long userId);
+    void removeAllFromCart(Long userId);
 
-    void removeItemsFromCart(Long cartId, Long cartItemId);
-
-    void removeAllItemsFromCart(Long cartId);
+//    CartDTO handleCart(CartDTO cartDTO);
+//
+//    List<CartDTO> getAllCarts();
+//
+//    CartDTO getCartDTOById(Long id);
+//
+//    CartDTO getCartDTOByUserId(Long userId);
 
 }

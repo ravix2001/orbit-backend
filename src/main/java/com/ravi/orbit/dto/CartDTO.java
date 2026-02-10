@@ -13,20 +13,22 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartDTO {
 
-    public CartDTO(Long id, String code, int totalItems, BigDecimal marketPrice,
-                   BigDecimal discountPercent, BigDecimal discountAmount, BigDecimal sellingPrice) {
-        this.id = id;
-        this.code = code;
-        this.totalItems = totalItems;
-        this.marketPrice = marketPrice;
-        this.discountPercent = discountPercent;
-        this.discountAmount = discountAmount;
-        this.sellingPrice = sellingPrice;
-    }
+//    public CartDTO(Long id, String code, int totalItems, BigDecimal marketPrice,
+//                   BigDecimal discountPercent, BigDecimal discountAmount, BigDecimal sellingPrice) {
+//        this.id = id;
+//        this.code = code;
+//        this.totalItems = totalItems;
+//        this.marketPrice = marketPrice;
+//        this.discountPercent = discountPercent;
+//        this.discountAmount = discountAmount;
+//        this.sellingPrice = sellingPrice;
+//    }
 
     private Long id;
 
-    private String code;
+    private Long userId;
+
+    private Long productId;
 
     private int totalItems;
 
@@ -38,8 +40,6 @@ public class CartDTO {
 
     private BigDecimal sellingPrice;
 
-    private Long userId;
-
-    private List<CartItemDTO> cartItems;
+    private List<ProductDTO> products;
 
 }
