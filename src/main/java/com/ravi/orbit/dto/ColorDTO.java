@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ColorDTO {
 
-    public ColorDTO(Long id, String color, boolean isAvailable, Double price, Integer quantity, Long productId) {
+    public ColorDTO(Long id, String color, boolean isAvailable, BigDecimal price, Integer quantity, Long productId) {
         this.id = id;
         this.color = color;
         this.isAvailable = isAvailable;
@@ -24,7 +26,7 @@ public class ColorDTO {
 
     private boolean isAvailable;
 
-    private Double price;
+    private BigDecimal price;
 
     private Integer quantity;
 

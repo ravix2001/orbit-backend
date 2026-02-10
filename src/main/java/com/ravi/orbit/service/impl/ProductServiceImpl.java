@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Transactional
@@ -222,8 +224,21 @@ public class ProductServiceImpl implements IProductService {
         product.setQuantity(productDTO.getQuantity());
         product.setMarketPrice(productDTO.getMarketPrice());
         product.setDiscountPercent(productDTO.getDiscountPercent());
-        product.setDiscountAmount((productDTO.getMarketPrice() * productDTO.getDiscountPercent() / 100));
-        product.setSellingPrice(productDTO.getMarketPrice() - (productDTO.getMarketPrice() * productDTO.getDiscountPercent() / 100) );
+
+        // discountAmount = marketPrice * discountPercent / 100
+        BigDecimal discountAmount =
+                productDTO.getMarketPrice()
+                        .multiply(productDTO.getDiscountPercent())
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+        product.setDiscountAmount(discountAmount);
+
+        // sellingPrice = marketPrice - discountAmount
+        BigDecimal sellingPrice =
+                productDTO.getMarketPrice()
+                        .subtract(discountAmount);
+
+        product.setSellingPrice(sellingPrice);
         product.setImageUrl(productDTO.getImageUrl());
 
         return product;

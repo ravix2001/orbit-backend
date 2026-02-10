@@ -5,6 +5,7 @@ import com.ravi.orbit.entity.Cart;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -12,8 +13,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartDTO {
 
-    public CartDTO(Long id, String code, int totalItems, double marketPrice,
-                   double discountPercent, double discountAmount, double sellingPrice) {
+    public CartDTO(Long id, String code, int totalItems, BigDecimal marketPrice,
+                   BigDecimal discountPercent, BigDecimal discountAmount, BigDecimal sellingPrice) {
         this.id = id;
         this.code = code;
         this.totalItems = totalItems;
@@ -29,13 +30,13 @@ public class CartDTO {
 
     private int totalItems;
 
-    private double marketPrice;
+    private BigDecimal marketPrice;
 
-    private double discountPercent;
+    private BigDecimal discountPercent;
 
-    private double discountAmount;
+    private BigDecimal discountAmount;
 
-    private double sellingPrice;
+    private BigDecimal sellingPrice;
 
     private Long userId;
 
