@@ -12,6 +12,8 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -30,7 +32,7 @@ public class Size {
     private boolean isAvailable = true;
 
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 
     @Column(name = "quantity")
     private Integer quantity;

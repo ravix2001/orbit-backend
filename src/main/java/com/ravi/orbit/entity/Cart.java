@@ -3,6 +3,8 @@ package com.ravi.orbit.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @Getter
 @Setter
@@ -11,19 +13,28 @@ public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    private int totalItems;
-
-    private double totalMarketPrice;
-
+    @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    private double discount;
+    @Column(name = "total_items")
+    private int totalItems;
 
-    private double totalSellingPrice;
+    @Column(name = "market_price")
+    private BigDecimal  marketPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "discount_percent")
+    private BigDecimal discountPercent;
+
+    @Column(name = "discount_amount")
+    private BigDecimal discountAmount;
+
+    @Column(name = "selling_price")
+    private BigDecimal sellingPrice;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 

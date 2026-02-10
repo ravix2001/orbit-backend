@@ -1,70 +1,46 @@
-//package com.ravi.orbit.controller;
-//
-//import com.ravi.orbit.dto.CartItemDTO;
-//import com.ravi.orbit.entity.Cart;
-//import com.ravi.orbit.entity.Product;
-//import com.ravi.orbit.service.CartService;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.Optional;
-//
-//@RestController
-//@RequestMapping("/api/cart")
-//@RequiredArgsConstructor
-//public class CartController {
-//
-//    private final CartService cartService;
-//
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<Cart> getCart(@PathVariable Long userId) {
-//        Optional<Cart> cart = cartService.findByUserId(userId);
-//        if (cart.isPresent()) {
-//            // Filter seller details when accessing products in cart items
-//            cart.get().getCartItems().forEach(cartItem -> {
-//                Product product = cartItem.getProduct();
-//                cartItem.setProduct(mapToProductWithPublicSeller(product));
-//            });
-//            return ResponseEntity.ok(cart.get());
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
-//
-//    // Optional utility method for filtering seller details
-//    private Product mapToProductWithPublicSeller(Product product) {
-//        product.setSeller(null); // nullify seller details if unused
-//        return product;
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<Cart> addProductToCart(@RequestBody CartItemDTO cartItemDto) {
-//        try{
-//            Cart updatedCart = cartService.addProductToCart(cartItemDto.getUserId(), cartItemDto.getProductId(), cartItemDto.getQuantity());
-//            return ResponseEntity.ok(updatedCart);
-//        }catch (IllegalArgumentException e){
-//            return ResponseEntity.badRequest().body(null);
-//        }catch (Exception e){
-//            return ResponseEntity.internalServerError().body(null);
-//        }
-//    }
-//
-//    @DeleteMapping("/user/{userId}/product/{productId}")
-//    public ResponseEntity<Void> removeProductFromCart(@PathVariable Long userId, @PathVariable Long productId) {
-//        boolean isDeleted = cartService.removeProductFromCart(userId, productId);
-//        if (isDeleted){
-//            return ResponseEntity.noContent().build();
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
-//
-//    @DeleteMapping("/{userId}")
-//    public ResponseEntity<Void> clearCart(@PathVariable Long userId) {
-//        boolean isCleared = cartService.clearCart(userId);
-//        if(isCleared){
-//            return ResponseEntity.noContent().build();
-//        }
-//        return ResponseEntity.notFound().build();
-//    }
-//
-//}
+package com.ravi.orbit.controller;
+
+import com.ravi.orbit.dto.CartDTO;
+import com.ravi.orbit.service.ICartService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/cart")
+@RequiredArgsConstructor
+public class CartController {
+
+    private final ICartService cartService;
+
+    @PostMapping
+    public ResponseEntity<CartDTO> handleCart(@RequestBody CartDTO cartDTO){
+        return ResponseEntity.ok(cartService.handleCart(cartDTO));
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<CartDTO> getCartById(@PathVariable Long id){
+        return ResponseEntity.ok(cartService.getCartDTOById(id));
+    }
+
+    @GetMapping("/myCart")
+    public ResponseEntity<CartDTO> getCartByUserId(@RequestParam Long userId){
+        return ResponseEntity.ok(cartService.getCartDTOByUserId(userId));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/allCarts")
+    public ResponseEntity<List<CartDTO>> getAllCarts(){
+        return ResponseEntity.ok(cartService.getAllCarts());
+    }
+
+}

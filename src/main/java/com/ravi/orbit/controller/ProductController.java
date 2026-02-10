@@ -44,7 +44,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductByCode(code));
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<Page<ProductDTO>> getProductsByName(
             @RequestParam String name,
             @RequestParam(defaultValue = "0") int page,
@@ -83,13 +83,13 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductDTOsBySellerId(pageable, sellerId));
     }
 
-    @DeleteMapping("deleteProduct/{id}")
+    @DeleteMapping("/deleteProduct/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("deleteProductHard/{id}")
+    @DeleteMapping("/deleteProductHard/{id}")
     public ResponseEntity<Void> deleteProductHard(@PathVariable Long id) {
         productService.deleteProductHard(id);
         return ResponseEntity.ok().build();
