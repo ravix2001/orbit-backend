@@ -1,125 +1,136 @@
-//package com.ravi.orbit.service;
+package com.ravi.orbit.service.impl;
+
+import com.ravi.orbit.dto.CartDTO;
+import com.ravi.orbit.dto.ProductDTO;
+import com.ravi.orbit.entity.Cart;
+import com.ravi.orbit.entity.Product;
+import com.ravi.orbit.entity.User;
+import com.ravi.orbit.exceptions.BadRequestException;
+import com.ravi.orbit.repository.CartRepository;
+import com.ravi.orbit.service.ICartService;
+import com.ravi.orbit.service.IProductService;
+import com.ravi.orbit.service.IUserService;
+import com.ravi.orbit.utils.CommonMethods;
+import com.ravi.orbit.utils.MyConstants;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class CartServiceImpl implements ICartService {
+
+    private IUserService userService;
+
+    private IProductService productService;
+
+    private final CartRepository cartRepository;
+
+    @Override
+    public void addToCart(Long userId, Long productId) {
+
+        User user = userService.getUserById(userId);
+        Product product = productService.getProductById(productId);
+
+        Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, productId);
+        if (cart.isEmpty()) {
+            Cart newCart = new Cart();
+            newCart.setUser(user);
+            newCart.setProduct(product);
+            cartRepository.save(newCart);
+        }
+    }
+
+    @Override
+    public CartDTO getCartByUserId(Long userId) {
+
+        CartDTO cartDTO = new CartDTO();
+        List<ProductDTO> products =  new ArrayList<>();
+
+        List<Cart> allItems = cartRepository.findAllByUserId(userId);
+        for (Cart cart : allItems) {
+            ProductDTO productDTO = productService.getProduct(cart.getProductId());
+            products.add(productDTO);
+        }
+
+        cartDTO.setProducts(products);
+        return cartDTO;
+    }
+
+    @Override
+    public void removeFromCart(Long userId, Long productId) {
+        Cart cart = getCartByUserIdAndProductId(userId, productId);
+        cartRepository.delete(cart);
+    }
+
+    @Override
+    public void removeAllFromCart(Long userId){
+        List<Cart> allItems = cartRepository.findAllByUserId(userId);
+        cartRepository.deleteAll(allItems);
+    }
+
+//    @Override
+//    public CartDTO handleCart(CartDTO cartDTO) {
 //
-//import com.ravi.orbit.dto.ProductResponseDTO;
-//import com.ravi.orbit.entity.Cart;
-//import com.ravi.orbit.entity.CartItem;
-//import com.ravi.orbit.entity.Product;
-//import com.ravi.orbit.entity.User;
-//import com.ravi.orbit.repository.CartItemRepository;
-//import com.ravi.orbit.repository.CartRepository;
-//import com.ravi.orbit.repository.ProductRepository;
-//import com.ravi.orbit.repository.UserRepository;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.stereotype.Service;
+//        User user = userService.getUserById(cartDTO.getUserId());
 //
-//import java.util.HashSet;
-//import java.util.Optional;
+//        Cart cart = null;
 //
-//@Service
-//@RequiredArgsConstructor
-//public class CartService {
-//
-//    private final CartRepository cartRepository;
-//
-//    private final CartItemRepository cartItemRepository;
-//
-//    private final ProductRepository productRepository;
-//    private final ProductService productService;
-//    private final UserRepository userRepository;
-//
-//    /**
-//     * Get Cart by User ID.
-//     */
-//    public Optional<Cart> findByUserId(Long userId) {
-//        return cartRepository.findByUserId(userId);
-//    }
-//
-//    /**
-//     * Add a product to the cart.
-//     */
-//    public Cart addProductToCart(Long userId, Long productId, int quantity) {         // id of product not productId so using Long and not String
-//        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found!"));
-//        Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("Product not found!"));
-//        ProductResponseDTO productResponse = productService.getProductResponse(product);
-//
-//        Cart cart = cartRepository.findByUserId(userId).orElseGet(() -> {
-//            Cart newCart = new Cart();
-//            newCart.setUser(user);
-//            newCart.setCartItems(new HashSet<>());
-//            return cartRepository.save(newCart);
-//        });
-//
-//        Optional<CartItem> existingCartItem = cart.getCartItems().stream()
-//                .filter(cartItem -> cartItem.getProduct().equals(product)).findFirst();
-//
-//        if (existingCartItem.isPresent()) {
-//            CartItem cartItem = existingCartItem.get();
-//            cartItem.setQuantity(cartItem.getQuantity() + quantity);
-//            cartItem.setMarketPrice(product.getMarketPrice()*cartItem.getQuantity());
-//            cartItem.setSellingPrice(product.getSellingPrice()*cartItem.getQuantity());
-//        }else {
-//            CartItem newCartItem = new CartItem();
-//            newCartItem.setCart(cart);
-//            newCartItem.setProduct(product);
-//            newCartItem.setQuantity(quantity);
-//            newCartItem.setMarketPrice(product.getMarketPrice()*quantity);
-//            newCartItem.setSellingPrice(product.getSellingPrice()*quantity);
-//            cart.getCartItems().add(newCartItem);
+//        if (CommonMethods.isEmpty(cartDTO.getId())) {
+//            cart = new Cart();
+//            cart.setUser(user);
+//        }
+//        else{
+//            cart = getCartById(cartDTO.getId());
 //        }
 //
-//        updateCartTotals(cart);
-//        return cartRepository.save(cart);
-//    }
-//
-//    /**
-//     * Remove a product from the cart.
-//     */
-//    public boolean removeProductFromCart(Long userId, Long productId) {
-//        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("Cart not found!"));
-//        cart.getCartItems().removeIf(cartItem -> cartItem.getProduct().getId().equals(productId));
-//        updateCartTotals(cart);
-//        cartRepository.save(cart);
-//        return true;
-//    }
-//
-//    /**
-//     * Update the totals for the cart.
-//     */
-//    private void updateCartTotals(Cart cart) {
-//        int totalItems = 0;
-//        double totalMarketPrice = 0;
-//        double totalSellingPrice = 0;
-//
-//        for (CartItem cartItem : cart.getCartItems()){
-//            totalItems += cartItem.getQuantity();
-//            totalMarketPrice += cartItem.getMarketPrice();
-//            totalSellingPrice += cartItem.getSellingPrice();
-//        }
-//
-//        cart.setTotalItems(totalItems);
-//        cart.setTotalMarketPrice(totalMarketPrice);
-//        cart.setTotalSellingPrice(totalSellingPrice);
-//    }
-//
-//    /**
-//     * Clear all items in the cart.
-//     */
-//    public boolean clearCart(Long userId) {
-//        boolean user = userRepository.existsById(userId);
-//        if (!user) {
-//            throw new IllegalArgumentException("User not found!");
-//        }
-//        Cart cart = cartRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("Cart not found!"));
-//        cart.getCartItems().clear();
-//
-//        cart.setTotalItems(0);
-//        cart.setTotalMarketPrice(0);
-//        cart.setTotalSellingPrice(0);
-//        cart.setDiscount(0);
+//        cart.setCode(cartDTO.getCode());
+//        cart.setTotalItems(cartDTO.getTotalItems());
+//        cart.setMarketPrice(cartDTO.getMarketPrice());
+//        cart.setDiscountPercent(cartDTO.getDiscountPercent());
+//        cart.setDiscountAmount(cartDTO.getDiscountAmount());
+//        cart.setSellingPrice(cartDTO.getSellingPrice());
 //
 //        cartRepository.save(cart);
-//        return true;
+//
+//        cartDTO.setId(cart.getId());
+//        return cartDTO;
 //    }
 //
+//    @Override
+//    public List<CartDTO> getAllCarts(){
+//        return cartRepository.getAllCarts();
+//    }
 //
-//}
+//    @Override
+//    public CartDTO getCartDTOByUserId(Long userId) {
+//        return cartRepository.getCartByUserId(userId)
+//                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND +
+//                        "Cart for user: " + userId));
+//    }
+//
+//    @Override
+//    public CartDTO getCartDTOById(Long id) {
+//        return cartRepository.getCartById(id)
+//                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND +
+//                        "Cart: " + id));
+//    }
+//
+//    private Cart getCartById(Long id) {
+//        return cartRepository.findById(id)
+//                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND +
+//                        "Cart: " + id));
+//    }
+
+    private Cart getCartByUserIdAndProductId(Long userId, Long productId) {
+        return cartRepository.findByUserIdAndProductId(userId, productId)
+                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND +
+                        "Cart for user: " + userId + " and product: " + productId));
+    }
+
+}

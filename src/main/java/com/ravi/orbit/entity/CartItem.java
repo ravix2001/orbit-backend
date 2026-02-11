@@ -13,15 +13,16 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String size;
-
+    @Column(name = "quantity")
     private int quantity = 1;
 
-    private double marketPrice;
+    @Column(name = "size")
+    private String size;
 
-    private double sellingPrice;
+    @Column(name = "color")
+    private String color;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 

@@ -5,6 +5,7 @@ import com.ravi.orbit.enums.EStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -13,8 +14,8 @@ import java.util.List;
 public class ProductDTO {
 
     public ProductDTO(Long id, String code, String name, String brand, EStatus status, String features, String description,
-                      Integer quantity, Double marketPrice, Double discountPercent, Double discountAmount,
-                      Double sellingPrice, Long categoryId, String categoryName, Long userId, String imageUrl) {
+                      Integer quantity, BigDecimal marketPrice, BigDecimal discountPercent, BigDecimal discountAmount,
+                      BigDecimal sellingPrice, Long categoryId, String categoryName, Long userId, String imageUrl) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -34,8 +35,8 @@ public class ProductDTO {
     }
 
     public ProductDTO(Long id, String name, String brand, String description, Integer quantity,
-                      Double marketPrice, Double discountPercent, Double discountAmount,
-                      Double sellingPrice, Long categoryId, String categoryName, Long userId, String imageUrl) {
+                      BigDecimal marketPrice, BigDecimal discountPercent, BigDecimal discountAmount,
+                      BigDecimal sellingPrice, Long categoryId, String categoryName, Long userId, String imageUrl) {
         this.id = id;
         this.name = name;
         this.brand = brand;
@@ -59,10 +60,10 @@ public class ProductDTO {
     private String description;
     private EStatus status;
     private Integer quantity;
-    private Double marketPrice;
-    private Double discountPercent;
-    private Double discountAmount;
-    private Double sellingPrice;
+    private BigDecimal marketPrice;
+    private BigDecimal discountPercent;
+    private BigDecimal discountAmount;
+    private BigDecimal sellingPrice;
     private List<ColorDTO> colors;
     private List<SizeDTO> sizes;
     private String imageUrl;
