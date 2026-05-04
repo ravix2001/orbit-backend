@@ -10,12 +10,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
-import java.util.Set;
 
 public interface UserRepository extends JpaRepository <User, Long> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.UserDTO(u.id, u.firstName, u.middleName, u.lastName, " +
-            " u.phone, u.email, u.username, u.imageUrl) " +
+            " u.phone, u.email, u.username, u.imageUrl, r.role, u.status) " +
             " FROM UserRoles ur " +
             " JOIN ur.user u " +
             " JOIN ur.role r " +

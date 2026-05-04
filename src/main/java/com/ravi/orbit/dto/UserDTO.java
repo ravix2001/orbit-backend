@@ -20,7 +20,7 @@ public class UserDTO {
     }
 
     public UserDTO(Long id, String firstName, String middleName, String lastName, String phone, String email,
-                   String username, String imageUrl){
+                   String username, String imageUrl, ERole role, EStatus status){
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -29,6 +29,8 @@ public class UserDTO {
         this.email = email;
         this.username = username;
         this.imageUrl = imageUrl;
+        this.role = role;
+        this.status = status;
     }
 
     public UserDTO(Long id, String firstName, String middleName, String lastName, String phone, String email,

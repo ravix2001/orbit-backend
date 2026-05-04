@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements IAdminService {
 
     private final IUserService userService;
-    private final UserRepository userRepository;
     private final UserRolesRepository userRolesRepository;
     private final RoleRepository roleRepository;
 
@@ -98,11 +97,6 @@ public class AdminServiceImpl implements IAdminService {
 
         log.info("User with id {} admin role revoked", id);
         return user.getUsername() + " is no longer an admin";
-    }
-
-    @Override
-    public Page<UserDTO> getUsersByRoleAndStatus(ERole role, EStatus status, Pageable pageable) {
-        return userRepository.getUsersByRoleAndStatus(role, status, pageable);
     }
 
     // for multiple roles

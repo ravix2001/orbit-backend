@@ -2,7 +2,6 @@ package com.ravi.orbit.controller;
 
 import com.ravi.orbit.dto.AuthDTO;
 import com.ravi.orbit.dto.UserDTO;
-import com.ravi.orbit.enums.ERole;
 import com.ravi.orbit.service.IAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-import java.util.Set;
 
 @Slf4j
 @RestController
