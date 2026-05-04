@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,29 +26,41 @@ public class CartController {
     private final ICartService cartService;
 
     @PostMapping("/add-to-cart")
-    public ResponseEntity<?> addToCart(@RequestParam Long userId,
-                                       @RequestParam Long productId){
-        cartService.addToCart(userId, productId);
+    public ResponseEntity<?> addToCart(@RequestParam Long productId){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        cartService.addToCart(username, productId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/my-cart")
-    public ResponseEntity<CartDTO> getCartById(){
+    public ResponseEntity<CartDTO> getMyCart(){
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        return ResponseEntity.ok(cartService.getCartByUserId(user.getId()));
+        String username = authentication.getName();
+
+        return ResponseEntity.ok(cartService.getCartByUsername(username));
     }
 
-    @PostMapping("/remove-from-cart")
-    public ResponseEntity<?> removeFromCart(@RequestParam Long userId,
-                                            @RequestParam Long productId){
-        cartService.removeFromCart(userId, productId);
+    @DeleteMapping("/remove-from-cart")
+    public ResponseEntity<?> removeFromCart(@RequestParam Long productId){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        cartService.removeFromCart(username, productId);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/clean-cart")
-    public ResponseEntity<?> removeAllFromCart(@RequestParam Long userId){
-        cartService.removeAllFromCart(userId);
+    @DeleteMapping("/clean-cart")
+    public ResponseEntity<?> removeAllFromCart(){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        cartService.removeAllFromCart(username);
         return ResponseEntity.ok().build();
     }
 

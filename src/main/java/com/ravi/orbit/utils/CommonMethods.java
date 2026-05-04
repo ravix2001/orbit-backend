@@ -2,6 +2,11 @@ package com.ravi.orbit.utils;
 
 public class CommonMethods {
 
+//    public static UserPrincipal getUserPrincipal() {
+//        return (UserPrincipal) SecurityContextHolder.getContext()
+//                .getAuthentication().getPrincipal();
+//    }
+
     public static boolean isEmpty(String userName) {
         return userName == null || userName.length() == 0;
     }
