@@ -22,7 +22,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.handleProduct(productDTO));
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<Page<ProductDTO>> getAllProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
@@ -34,17 +34,17 @@ public class ProductController {
         return ResponseEntity.ok(productService.getAllProducts(pageable));
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProduct(id));
     }
 
-    @GetMapping("/product")
-    public ResponseEntity<ProductDTO> getProductById(@RequestParam String code) {
+    @GetMapping(params = "code")
+    public ResponseEntity<ProductDTO> getProductByCode(@RequestParam String code) {
         return ResponseEntity.ok(productService.getProductByCode(code));
     }
 
-    @GetMapping
+    @GetMapping(params = "name")
     public ResponseEntity<Page<ProductDTO>> getProductsByName(
             @RequestParam String name,
             @RequestParam(defaultValue = "0") int page,
@@ -57,8 +57,8 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductDTOsByName(pageable, name));
     }
 
-    @GetMapping("/category")
-    public ResponseEntity<Page<ProductDTO>> getProductDTOsByCategoryId(
+    @GetMapping(params = "categoryId")
+    public ResponseEntity<Page<ProductDTO>> getProductsByCategoryId(
             @RequestParam Long categoryId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
@@ -70,7 +70,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductDTOsByCategoryId(pageable, categoryId));
     }
 
-    @GetMapping("/seller")
+    @GetMapping(params = "sellerId")
     public ResponseEntity<Page<ProductDTO>> getProductsBySellerId(
             @RequestParam Long sellerId,
             @RequestParam(defaultValue = "0") int page,

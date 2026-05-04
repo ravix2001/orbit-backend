@@ -20,6 +20,8 @@ import com.ravi.orbit.utils.MyConstants;
 import com.ravi.orbit.utils.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -166,6 +168,11 @@ public class UserServiceImpl implements IUserService {
         return userRepository.getAuthByUsername(username)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "User: " + username));
+    }
+
+    @Override
+    public Page<UserDTO> getUsersByRoleAndStatus(ERole role, EStatus status, Pageable pageable) {
+        return userRepository.getUsersByRoleAndStatus(role, status, pageable);
     }
 
     @Override

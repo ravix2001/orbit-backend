@@ -12,6 +12,4 @@ public interface IAdminService {
 
     String deleteAdmin(Long id);
 
-    Page<UserDTO> getUsersByRoleAndStatus(ERole role, EStatus status, Pageable pageable);
-
 }

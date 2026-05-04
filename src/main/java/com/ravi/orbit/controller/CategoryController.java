@@ -24,7 +24,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.handleCategory(categoryDTO));
     }
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<Page<CategoryDTO>> getAllCategories(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
@@ -36,7 +36,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getAllCategories(pageable));
     }
 
-    @GetMapping("/category/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CategoryDTO> getCategoryDTOById(@PathVariable Long id) {
         return ResponseEntity.ok(categoryService.getCategoryDTOById(id));
     }
