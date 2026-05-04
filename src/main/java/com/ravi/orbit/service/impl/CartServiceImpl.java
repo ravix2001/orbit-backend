@@ -25,19 +25,19 @@ import java.util.Optional;
 @Transactional
 public class CartServiceImpl implements ICartService {
 
-    private IUserService userService;
+    private final IUserService userService;
 
-    private IProductService productService;
+    private final IProductService productService;
 
     private final CartRepository cartRepository;
 
     @Override
-    public void addToCart(Long userId, Long productId) {
+    public void addToCart(String username, Long productId) {
 
-        User user = userService.getUserById(userId);
+        User user = userService.getUserByUsername(username);
         Product product = productService.getProductById(productId);
 
-        Optional<Cart> cart = cartRepository.findByUserIdAndProductId(userId, productId);
+        Optional<Cart> cart = cartRepository.findByUserIdAndProductId(user.getId(), productId);
         if (cart.isEmpty()) {
             Cart newCart = new Cart();
             newCart.setUser(user);
@@ -47,12 +47,13 @@ public class CartServiceImpl implements ICartService {
     }
 
     @Override
-    public CartDTO getCartByUserId(Long userId) {
+    public CartDTO getCartByUsername(String username) {
 
+        User user = userService.getUserByUsername(username);
         CartDTO cartDTO = new CartDTO();
         List<ProductDTO> products =  new ArrayList<>();
 
-        List<Cart> allItems = cartRepository.findAllByUserId(userId);
+        List<Cart> allItems = cartRepository.findAllByUserId(user.getId());
         for (Cart cart : allItems) {
             ProductDTO productDTO = productService.getProduct(cart.getProductId());
             products.add(productDTO);
@@ -63,14 +64,16 @@ public class CartServiceImpl implements ICartService {
     }
 
     @Override
-    public void removeFromCart(Long userId, Long productId) {
-        Cart cart = getCartByUserIdAndProductId(userId, productId);
+    public void removeFromCart(String username, Long productId) {
+        User user = userService.getUserByUsername(username);
+        Cart cart = getCartByUserIdAndProductId(user.getId(), productId);
         cartRepository.delete(cart);
     }
 
     @Override
-    public void removeAllFromCart(Long userId){
-        List<Cart> allItems = cartRepository.findAllByUserId(userId);
+    public void removeAllFromCart(String username) {
+        User user = userService.getUserByUsername(username);
+        List<Cart> allItems = cartRepository.findAllByUserId(user.getId());
         cartRepository.deleteAll(allItems);
     }
 

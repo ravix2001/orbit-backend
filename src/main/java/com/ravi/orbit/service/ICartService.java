@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface ICartService {
 
-    void addToCart(Long userId, Long productId);
+    void addToCart(String username, Long productId);
 
-    CartDTO getCartByUserId(Long userId);
+    CartDTO getCartByUsername(String username);
 
-    void removeFromCart(Long userId, Long productId);
+    void removeFromCart(String username, Long productId);
 
-    void removeAllFromCart(Long userId);
+    void removeAllFromCart(String username);
 
 //    CartDTO handleCart(CartDTO cartDTO);
 //
