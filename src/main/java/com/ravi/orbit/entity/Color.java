@@ -13,17 +13,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "color")
-public class Color {
+@Table(name = "color_tbl")
+public class Color extends UIDBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "color")
     private String color;
@@ -42,6 +40,6 @@ public class Color {
     private Product product;
 
     @Column(name = "product_id", insertable = false, updatable = false)
-    private Long productId;
+    private UUID productId;
 
 }

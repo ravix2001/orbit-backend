@@ -19,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -29,7 +31,7 @@ public class AdminServiceImpl implements IAdminService {
     private final RoleRepository roleRepository;
 
     @Override
-    public String createAdmin(Long id) {
+    public String createAdmin(UUID id) {
         User user = userService.getUserById(id);
 
         // Fetch the user's current role
@@ -65,7 +67,7 @@ public class AdminServiceImpl implements IAdminService {
 
 
     @Override
-    public String deleteAdmin(Long id) {
+    public String deleteAdmin(UUID id) {
         User user = userService.getUserById(id);
 
         // Fetch the user's current role

@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDTO {
 
-    public OrderDTO(Long id, Long orderNumber, int totalItems, double totalMarketPrice,
+    public OrderDTO(UUID id, Long orderNumber, int totalItems, double totalMarketPrice,
                     double totalDiscount, double totalSellingPrice, EOrderStatus orderStatus,
                     LocalDateTime orderDate, LocalDateTime deliveryDate) {
         this.id = id;
@@ -26,7 +27,7 @@ public class OrderDTO {
         this.deliveryDate = deliveryDate;
     }
 
-    private Long id;
+    private UUID id;
 
     private Long orderNumber;
 
@@ -47,10 +48,16 @@ public class OrderDTO {
 
     private LocalDateTime deliveryDate;
 
-    private Long userId;
+    private UUID customerId;
 
-    private Long sellerId;
+    private UserDTO customer;
 
-    private Long productId;
+    private UUID sellerId;
+
+    private UserDTO seller;
+
+    private UUID productId;
+
+    private ProductDTO product;
 
 }

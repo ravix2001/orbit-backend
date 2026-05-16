@@ -3,16 +3,15 @@ package com.ravi.orbit.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
-@Table(name = "cart")
-public class Cart {
+@Table(name = "cart_tbl")
+public class Cart extends UIDBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
 //    @Column(name = "code", nullable = false, unique = true)
 //    private String code;
@@ -33,17 +32,17 @@ public class Cart {
 //    private BigDecimal sellingPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private User customer;
 
-    @Column(name = "user_id", insertable = false, updatable = false)
-    private Long userId;
+    @Column(name = "customer_id", insertable = false, updatable = false)
+    private UUID customerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     @Column(name = "product_id", insertable = false, updatable = false)
-    private Long productId;
+    private UUID productId;
 
 }

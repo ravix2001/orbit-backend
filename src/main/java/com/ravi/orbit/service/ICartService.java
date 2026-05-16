@@ -4,14 +4,15 @@ import com.ravi.orbit.dto.CartDTO;
 import com.ravi.orbit.entity.Cart;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ICartService {
 
-    void addToCart(String username, Long productId);
+    void addToCart(String username, UUID productId);
 
     CartDTO getCartByUsername(String username);
 
-    void removeFromCart(String username, Long productId);
+    void removeFromCart(String username, UUID productId);
 
     void removeAllFromCart(String username);
 
@@ -19,8 +20,8 @@ public interface ICartService {
 //
 //    List<CartDTO> getAllCarts();
 //
-//    CartDTO getCartDTOById(Long id);
+//    CartDTO getCartDTOById(UUID id);
 //
-//    CartDTO getCartDTOByUserId(Long userId);
+//    CartDTO getCartDTOByUserId(UUID userId);
 
 }

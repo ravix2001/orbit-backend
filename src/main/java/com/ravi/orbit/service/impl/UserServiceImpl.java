@@ -22,13 +22,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -150,7 +151,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDTO getUserDTOById(Long id) {
+    public UserDTO getUserDTOById(UUID id) {
         return userRepository.getUserDTOById(id)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "User: " + id));
@@ -161,6 +162,13 @@ public class UserServiceImpl implements IUserService {
         return userRepository.getUserDTOByUsername(username)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "User: " + username));
+    }
+
+    @Override
+    public User getUserPrincipal() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        return getUserByUsername(username);
     }
 
     @Override
@@ -184,13 +192,13 @@ public class UserServiceImpl implements IUserService {
 
     // remaining to delete its children
     @Override
-    public void deleteUserHard(Long userId) {
+    public void deleteUserHard(UUID userId) {
         User user = getUserById(userId);
         userRepository.delete(user);
     }
 
     @Override
-    public User getUserById(Long userId) {
+    public User getUserById(UUID userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "User: " + userId));

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,7 +20,7 @@ public class UserDTO {
         this.password = password;
     }
 
-    public UserDTO(Long id, String firstName, String middleName, String lastName, String phone, String email,
+    public UserDTO(UUID id, String firstName, String middleName, String lastName, String phone, String email,
                    String username, String imageUrl, ERole role, EStatus status){
         this.id = id;
         this.firstName = firstName;
@@ -33,7 +34,7 @@ public class UserDTO {
         this.status = status;
     }
 
-    public UserDTO(Long id, String firstName, String middleName, String lastName, String phone, String email,
+    public UserDTO(UUID id, String firstName, String middleName, String lastName, String phone, String email,
                    String username, EGender gender, LocalDate dob, ERole role, EStatus status, String imageUrl,
                    String address, String zipcode, String state, String countryCode) {
         this.id = id;
@@ -54,7 +55,7 @@ public class UserDTO {
         this.countryCode = countryCode;
     }
 
-    private Long id;
+    private UUID id;
 
     private String firstName;
 

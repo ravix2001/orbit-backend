@@ -9,12 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, p.quantity, " +
             "p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
-            "p.categoryId, c.name, p.userId, p.imageUrl ) " +
+            "p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
             " WHERE p.status = com.ravi.orbit.enums.EStatus.ACTIVE ")
@@ -22,15 +23,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.code, p.name, p.brand, p.status, p.features, " +
             "p.description, p.quantity, p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
-            "p.categoryId, c.name, p.userId, p.imageUrl ) " +
+            "p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
             " WHERE p.id = :id")
-    Optional<ProductDTO> getProductDTOById(Long id);
+    Optional<ProductDTO> getProductDTOById(UUID id);
 
     @Query("SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.code, p.name, p.brand, p.status, p.features, " +
             "p.description, p.quantity, p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
-            "p.categoryId, c.name, p.userId, p.imageUrl ) " +
+            "p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
             " WHERE p.code = :code")
@@ -38,7 +39,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, p.quantity, " +
             "p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
-            "p.categoryId, c.name, p.userId, p.imageUrl ) " +
+            "p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
             " WHERE p.name = :name AND p.status = com.ravi.orbit.enums.EStatus.ACTIVE ")
@@ -46,18 +47,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, p.quantity, " +
             "p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
-            "p.categoryId, c.name, p.userId, p.imageUrl ) " +
+            "p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
             " WHERE p.categoryId = :categoryId AND p.status = com.ravi.orbit.enums.EStatus.ACTIVE ")
-    Page<ProductDTO> getProductDTOsByCategoryId(Pageable pageable, Long categoryId);
+    Page<ProductDTO> getProductDTOsByCategoryId(Pageable pageable, UUID categoryId);
 
     @Query("SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, p.quantity, " +
             "p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
-            "p.categoryId, c.name, p.userId, p.imageUrl ) " +
+            "p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
-            " WHERE p.userId = :sellerId AND p.status = com.ravi.orbit.enums.EStatus.ACTIVE ")
-    Page<ProductDTO> getProductDTOsBySellerId(Pageable pageable, Long sellerId);
+            " WHERE p.sellerId = :sellerId AND p.status = com.ravi.orbit.enums.EStatus.ACTIVE ")
+    Page<ProductDTO> getProductDTOsBySellerId(Pageable pageable, UUID sellerId);
 
 }

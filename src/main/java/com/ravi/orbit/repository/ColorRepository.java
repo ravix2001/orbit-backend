@@ -6,12 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface ColorRepository extends JpaRepository<Color, Long> {
+public interface ColorRepository extends JpaRepository<Color, UUID> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.ColorDTO(c.id, c.color, c.isAvailable, c.price, c.quantity, c.productId)" +
             " FROM Color c" +
             " WHERE c.productId = :productId ")
-    List<ColorDTO> getColorDTOsByProductId(Long productId);
+    List<ColorDTO> getColorDTOsByProductId(UUID productId);
 
 }

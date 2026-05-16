@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ravi.orbit.entity.Product;
 import lombok.*;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CartItemDTO {
 
-    private Long id;
+    private UUID id;
 
     private int quantity = 1;
 

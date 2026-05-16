@@ -1,5 +1,7 @@
 package com.ravi.orbit.utils;
 
+import java.util.UUID;
+
 public class CommonMethods {
 
 //    public static UserPrincipal getUserPrincipal() {
@@ -7,8 +9,12 @@ public class CommonMethods {
 //                .getAuthentication().getPrincipal();
 //    }
 
-    public static boolean isEmpty(String userName) {
-        return userName == null || userName.length() == 0;
+    public static boolean isEmpty(UUID value) {
+        return value == null;
+    }
+
+    public static boolean isEmpty(String value) {
+        return value == null || value.isBlank();
     }
 
     public static boolean isEmpty(Double d) {

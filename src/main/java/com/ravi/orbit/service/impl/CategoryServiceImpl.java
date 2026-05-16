@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements ICategoryService {
@@ -46,27 +48,27 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
     @Override
-    public CategoryDTO getCategoryDTOById(Long id) {
+    public CategoryDTO getCategoryDTOById(UUID id) {
         return categoryRepository.getCategoryDTOById(id)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "Category: " + id));
     }
 
     @Override
-    public void deleteCategory(Long id) {
+    public void deleteCategory(UUID id) {
         Category category = getCategoryById(id);
         category.setStatus(EStatus.DELETED);
         categoryRepository.save(category);
     }
 
     @Override
-    public void deleteCategoryHard(Long id) {   // remaining to delete its children
+    public void deleteCategoryHard(UUID id) {   // remaining to delete its children
         Category category = getCategoryById(id);
         categoryRepository.delete(category);
     }
 
     @Override
-    public Category getCategoryById(Long id) {
+    public Category getCategoryById(UUID id) {
         return categoryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "Category: " + id));

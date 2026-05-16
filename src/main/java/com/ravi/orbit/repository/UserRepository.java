@@ -10,8 +10,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface UserRepository extends JpaRepository <User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.UserDTO(u.id, u.firstName, u.middleName, u.lastName, " +
             " u.phone, u.email, u.username, u.imageUrl, r.role, u.status) " +
@@ -28,7 +29,7 @@ public interface UserRepository extends JpaRepository <User, Long> {
             " LEFT JOIN UserRoles ur ON u.id = ur.userId " +
             " LEFT JOIN Role r ON ur.roleId = r.id " +
             " WHERE u.id = :id ")
-    Optional<UserDTO> getUserDTOById(Long id);
+    Optional<UserDTO> getUserDTOById(UUID id);
 
     @Query("SELECT NEW com.ravi.orbit.dto.UserDTO(u.id, u.firstName, u.middleName, u.lastName, " +
             " u.phone, u.email, u.username, u.gender, u.dob, r.role, u.status, u.imageUrl, " +

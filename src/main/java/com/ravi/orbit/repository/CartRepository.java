@@ -7,12 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface CartRepository extends JpaRepository<Cart, Long> {
+public interface CartRepository extends JpaRepository<Cart, UUID> {
 
-    Optional<Cart> findByUserIdAndProductId(Long userId, Long productId);
+    Optional<Cart> findByCustomerIdAndProductId(UUID customerId, UUID productId);
 
-    List<Cart> findAllByUserId(Long userId);
+    List<Cart> findAllByCustomerId(UUID customerId);
 
 //    @Query(" SELECT NEW com.ravi.orbit.dto.CartDTO(c.id, c.code, c.totalItems, c.marketPrice, " +
 //            " c.discountPercent, c.discountAmount, c.sellingPrice) " +

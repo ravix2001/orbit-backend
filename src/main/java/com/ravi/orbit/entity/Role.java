@@ -16,13 +16,10 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "role")
-public class Role {
+@Table(name = "role_tbl")
+public class Role extends UIDBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", unique = true, nullable = false)

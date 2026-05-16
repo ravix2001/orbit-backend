@@ -7,17 +7,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "order")
-public class Order {
+@Table(name = "order_tbl")
+public class Order extends UIDBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "order_number")
     private Long orderNumber;
@@ -48,11 +46,11 @@ public class Order {
 
     // Customer
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+    private User customer;
 
-    @Column(name = "user_id", insertable = false, updatable = false)
-    private Long userId;
+    @Column(name = "customer_id", insertable = false, updatable = false)
+    private UUID customerId;
 
     // Seller
     @ManyToOne(fetch = FetchType.LAZY)
@@ -60,13 +58,13 @@ public class Order {
     private User seller;
 
     @Column(name = "seller_id", insertable = false, updatable = false)
-    private Long sellerId;
+    private UUID sellerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     @Column(name = "product_id", insertable = false, updatable = false)
-    private Long productId;
+    private UUID productId;
 
 }

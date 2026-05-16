@@ -12,16 +12,15 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Entity
 @Getter
 @Setter
-@Table(name = "product_image")
-public class ProductImage {
+@Table(name = "product_image_tbl")
+public class ProductImage extends UIDBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -34,6 +33,6 @@ public class ProductImage {
     private Product product;
 
     @Column(name = "product_id", insertable = false, updatable = false)
-    private Long productId;
+    private UUID productId;
 
 }

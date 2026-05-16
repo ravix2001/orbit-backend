@@ -1,15 +1,11 @@
 package com.ravi.orbit.service;
 
-import com.ravi.orbit.dto.UserDTO;
-import com.ravi.orbit.enums.ERole;
-import com.ravi.orbit.enums.EStatus;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.UUID;
 
 public interface IAdminService {
 
-    String createAdmin(Long id);
+    String createAdmin(UUID id);
 
-    String deleteAdmin(Long id);
+    String deleteAdmin(UUID id);
 
 }
