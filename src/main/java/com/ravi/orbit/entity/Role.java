@@ -22,14 +22,14 @@ public class Role extends UIDBase {
     private static final long serialVersionUID = 1L;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", unique = true, nullable = false)
-    private ERole role;
+    @Column(name = "title", nullable = false)
+    private ERole title = ERole.ROLE_USER;
 
     @Column(name = "color_code")
     private String colorCode;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private EStatus status;
+    private EStatus status = EStatus.ACTIVE;
 
 }

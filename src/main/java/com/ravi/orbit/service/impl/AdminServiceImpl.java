@@ -1,22 +1,17 @@
 package com.ravi.orbit.service.impl;
 
-import com.ravi.orbit.dto.UserDTO;
 import com.ravi.orbit.entity.Role;
 import com.ravi.orbit.entity.User;
 import com.ravi.orbit.entity.UserRoles;
 import com.ravi.orbit.enums.ERole;
-import com.ravi.orbit.enums.EStatus;
 import com.ravi.orbit.exceptions.BadRequestException;
 import com.ravi.orbit.repository.RoleRepository;
-import com.ravi.orbit.repository.UserRepository;
 import com.ravi.orbit.repository.UserRolesRepository;
 import com.ravi.orbit.service.IAdminService;
 import com.ravi.orbit.service.IUserService;
 import com.ravi.orbit.utils.MyConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -40,18 +35,18 @@ public class AdminServiceImpl implements IAdminService {
                         .ERR_MSG_NOT_FOUND + "User has no role assigned"));
 
         // Check if the user is already admin
-        if (currentRole.getRole().getRole() == ERole.ROLE_ADMIN) {
+        if (currentRole.getRole().getTitle() == ERole.ROLE_ADMIN) {
             throw new BadRequestException(MyConstants
                     .ERR_MSG_ALREADY_EXIST + " User as admin");
         }
 
         // If the user has USER role, delete it
-        if (currentRole.getRole().getRole() == ERole.ROLE_USER) {
+        if (currentRole.getRole().getTitle() == ERole.ROLE_USER) {
             userRolesRepository.delete(currentRole);
         }
 
         // Assign ADMIN role
-        Role adminRole = roleRepository.findByRole(ERole.ROLE_ADMIN)
+        Role adminRole = roleRepository.findByTitle(ERole.ROLE_ADMIN)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + " " + ERole.ROLE_ADMIN));
 
@@ -76,18 +71,18 @@ public class AdminServiceImpl implements IAdminService {
                         .ERR_MSG_NOT_FOUND + "User has no role assigned"));
 
         // If the user is already a regular user, throw error
-        if (currentRole.getRole().getRole() == ERole.ROLE_USER) {
+        if (currentRole.getRole().getTitle() == ERole.ROLE_USER) {
             throw new BadRequestException(MyConstants
                     .ERR_MSG_ALREADY_EXIST + " User is already a regular user");
         }
 
         // If the user has ADMIN role, remove it
-        if (currentRole.getRole().getRole() == ERole.ROLE_ADMIN) {
+        if (currentRole.getRole().getTitle() == ERole.ROLE_ADMIN) {
             userRolesRepository.delete(currentRole);
         }
 
         // Assign USER role
-        Role userRole = roleRepository.findByRole(ERole.ROLE_USER)
+        Role userRole = roleRepository.findByTitle(ERole.ROLE_USER)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + " " + ERole.ROLE_USER));
 

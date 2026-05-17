@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 
 import lombok.Getter;
@@ -34,6 +35,13 @@ public class UIDBase implements Serializable {
 
     @Column(name = "updated_datetime")
     protected LocalDateTime updatedDateTime;
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        this.createdDateTime = now;
+        this.updatedDateTime = now;
+    }
 
     @PreUpdate
     protected void onUpdate() {

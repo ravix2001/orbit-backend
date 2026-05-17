@@ -75,8 +75,8 @@ public class UserServiceImpl implements IUserService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
 
-        Role roleDB = roleRepository.findByRole(role)
-                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Role" + role));
+        Role roleDB = roleRepository.findByTitle(role)
+                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Role: " + role));
 
         UserRoles userRoles = new UserRoles();
         userRoles.setUser(user);
@@ -116,12 +116,12 @@ public class UserServiceImpl implements IUserService {
         Role role = roleRepository.findRoleByUsername(username)
                 .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Role of user with username: " + username));
 
-        if (!role.getRole().equals(requiredRole)) {
+        if (!role.getTitle().equals(requiredRole)) {
             throw new BadRequestException("User does not have required role");
         }
 
         // Generate JWTs with all roles
-        String accessToken = jwtUtil.generateJwtToken(username, role.getRole());
+        String accessToken = jwtUtil.generateJwtToken(username, role.getTitle());
         String refreshToken = jwtUtil.generateRefreshToken(username);
 
         // Save refresh token
