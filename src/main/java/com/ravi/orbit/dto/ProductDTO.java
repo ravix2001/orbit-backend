@@ -7,15 +7,16 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductDTO {
 
-    public ProductDTO(Long id, String code, String name, String brand, EStatus status, String features, String description,
+    public ProductDTO(UUID id, String code, String name, String brand, EStatus status, String features, String description,
                       Integer quantity, BigDecimal marketPrice, BigDecimal discountPercent, BigDecimal discountAmount,
-                      BigDecimal sellingPrice, Long categoryId, String categoryName, Long userId, String imageUrl) {
+                      BigDecimal sellingPrice, UUID categoryId, String categoryName, UUID sellerId, String imageUrl) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -30,13 +31,13 @@ public class ProductDTO {
         this.sellingPrice = sellingPrice;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
-        this.sellerId = userId;
+        this.sellerId = sellerId;
         this.imageUrl = imageUrl;
     }
 
-    public ProductDTO(Long id, String name, String brand, String description, Integer quantity,
+    public ProductDTO(UUID id, String name, String brand, String description, Integer quantity,
                       BigDecimal marketPrice, BigDecimal discountPercent, BigDecimal discountAmount,
-                      BigDecimal sellingPrice, Long categoryId, String categoryName, Long userId, String imageUrl) {
+                      BigDecimal sellingPrice, UUID categoryId, String categoryName, UUID sellerId, String imageUrl) {
         this.id = id;
         this.name = name;
         this.brand = brand;
@@ -48,11 +49,11 @@ public class ProductDTO {
         this.sellingPrice = sellingPrice;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
-        this.sellerId = userId;
+        this.sellerId = sellerId;
         this.imageUrl = imageUrl;
     }
 
-    private Long id;
+    private UUID id;
     private String code;
     private String name;
     private String brand;
@@ -68,8 +69,8 @@ public class ProductDTO {
     private List<SizeDTO> sizes;
     private String imageUrl;
 
-    private Long categoryId;
-    private Long sellerId;
+    private UUID categoryId;
+    private UUID sellerId;
 
     private String categoryName;
     private String sellerName;

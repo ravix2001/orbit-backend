@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor
@@ -35,7 +37,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
         return ResponseEntity.ok(productService.getProduct(id));
     }
 
@@ -59,7 +61,7 @@ public class ProductController {
 
     @GetMapping(params = "categoryId")
     public ResponseEntity<Page<ProductDTO>> getProductsByCategoryId(
-            @RequestParam Long categoryId,
+            @RequestParam UUID categoryId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "id") String sortBy,
@@ -72,7 +74,7 @@ public class ProductController {
 
     @GetMapping(params = "sellerId")
     public ResponseEntity<Page<ProductDTO>> getProductsBySellerId(
-            @RequestParam Long sellerId,
+            @RequestParam UUID sellerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "id") String sortBy,
@@ -84,13 +86,13 @@ public class ProductController {
     }
 
     @DeleteMapping("/deleteProduct/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/deleteProductHard/{id}")
-    public ResponseEntity<Void> deleteProductHard(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProductHard(@PathVariable UUID id) {
         productService.deleteProductHard(id);
         return ResponseEntity.ok().build();
     }

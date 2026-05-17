@@ -6,17 +6,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "product")
-public class Product {
+@Table(name = "product_tbl")
+public class Product extends UIDBase{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "code")
     private String code;
@@ -55,17 +53,17 @@ public class Product {
     private BigDecimal sellingPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "seller", referencedColumnName = "id")
+    private User seller;
 
-    @Column(name = "user_id", insertable = false, updatable = false)
-    private Long userId;
+    @Column(name = "seller_id", insertable = false, updatable = false)
+    private UUID sellerId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 
     @Column(name = "category_id", insertable = false, updatable = false)
-    private Long categoryId;
+    private UUID categoryId;
 
 }

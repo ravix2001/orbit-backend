@@ -8,7 +8,7 @@ import com.ravi.orbit.enums.EStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Set;
+import java.util.UUID;
 
 public interface IUserService {
 
@@ -20,9 +20,11 @@ public interface IUserService {
 
     UserDTO updateProfile(UserDTO userDTO, String username);
 
-    UserDTO getUserDTOById(Long id);
+    UserDTO getUserDTOById(UUID id);
 
     UserDTO getUserDTOByUsername(String username);
+
+    User getUserPrincipal();
 
     UserDTO getUserAuthByUsername(String username);
 
@@ -30,9 +32,9 @@ public interface IUserService {
 
     void deleteUser(String username);
 
-    void deleteUserHard(Long userId);
+    void deleteUserHard(UUID userId);
 
-    User getUserById(Long id);
+    User getUserById(UUID id);
 
     User getUserByUsername(String username);
 

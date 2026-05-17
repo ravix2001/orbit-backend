@@ -7,10 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.CategoryDTO(c.id, c.name, c.status, c.imageUrl) " +
             " FROM Category c" +
@@ -20,6 +20,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT NEW com.ravi.orbit.dto.CategoryDTO(c.id, c.name, c.status, c.imageUrl) " +
             " FROM Category c" +
             " WHERE c.id = :id")
-    Optional<CategoryDTO> getCategoryDTOById(Long id);
+    Optional<CategoryDTO> getCategoryDTOById(UUID id);
 
 }

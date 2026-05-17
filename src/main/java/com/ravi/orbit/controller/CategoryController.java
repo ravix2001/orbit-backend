@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor
@@ -37,20 +39,20 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CategoryDTO> getCategoryDTOById(@PathVariable Long id) {
+    public ResponseEntity<CategoryDTO> getCategoryDTOById(@PathVariable UUID id) {
         return ResponseEntity.ok(categoryService.getCategoryDTOById(id));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteCategory/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCategory(@PathVariable UUID id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/deleteCategoryHard/{id}")
-    public ResponseEntity<?> deleteCategoryHard(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCategoryHard(@PathVariable UUID id) {
         categoryService.deleteCategoryHard(id);
         return ResponseEntity.ok().build();
     }

@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ColorDTO {
 
-    public ColorDTO(Long id, String color, boolean isAvailable, BigDecimal price, Integer quantity, Long productId) {
+    public ColorDTO(UUID id, String color, boolean isAvailable, BigDecimal price, Integer quantity, UUID productId) {
         this.id = id;
         this.color = color;
         this.isAvailable = isAvailable;
@@ -20,7 +21,7 @@ public class ColorDTO {
         this.productId = productId;
     }
 
-    private Long id;
+    private UUID id;
 
     private String color;
 
@@ -30,6 +31,6 @@ public class ColorDTO {
 
     private Integer quantity;
 
-    private Long productId;
+    private UUID productId;
 
 }

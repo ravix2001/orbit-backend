@@ -10,7 +10,6 @@ import com.ravi.orbit.repository.CartRepository;
 import com.ravi.orbit.service.ICartService;
 import com.ravi.orbit.service.IProductService;
 import com.ravi.orbit.service.IUserService;
-import com.ravi.orbit.utils.CommonMethods;
 import com.ravi.orbit.utils.MyConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,15 +32,15 @@ public class CartServiceImpl implements ICartService {
     private final CartRepository cartRepository;
 
     @Override
-    public void addToCart(String username, Long productId) {
+    public void addToCart(String username, UUID productId) {
 
-        User user = userService.getUserByUsername(username);
+        User customer = userService.getUserByUsername(username);
         Product product = productService.getProductById(productId);
 
-        Optional<Cart> cart = cartRepository.findByUserIdAndProductId(user.getId(), productId);
+        Optional<Cart> cart = cartRepository.findByCustomerIdAndProductId(customer.getId(), productId);
         if (cart.isEmpty()) {
             Cart newCart = new Cart();
-            newCart.setUser(user);
+            newCart.setCustomer(customer);
             newCart.setProduct(product);
             cartRepository.save(newCart);
         }
@@ -49,11 +49,11 @@ public class CartServiceImpl implements ICartService {
     @Override
     public CartDTO getCartByUsername(String username) {
 
-        User user = userService.getUserByUsername(username);
+        User customer = userService.getUserByUsername(username);
         CartDTO cartDTO = new CartDTO();
         List<ProductDTO> products =  new ArrayList<>();
 
-        List<Cart> allItems = cartRepository.findAllByUserId(user.getId());
+        List<Cart> allItems = cartRepository.findAllByCustomerId(customer.getId());
         for (Cart cart : allItems) {
             ProductDTO productDTO = productService.getProduct(cart.getProductId());
             products.add(productDTO);
@@ -64,16 +64,16 @@ public class CartServiceImpl implements ICartService {
     }
 
     @Override
-    public void removeFromCart(String username, Long productId) {
-        User user = userService.getUserByUsername(username);
-        Cart cart = getCartByUserIdAndProductId(user.getId(), productId);
+    public void removeFromCart(String username, UUID productId) {
+        User customer = userService.getUserByUsername(username);
+        Cart cart = getCartByUserIdAndProductId(customer.getId(), productId);
         cartRepository.delete(cart);
     }
 
     @Override
     public void removeAllFromCart(String username) {
-        User user = userService.getUserByUsername(username);
-        List<Cart> allItems = cartRepository.findAllByUserId(user.getId());
+        User customer = userService.getUserByUsername(username);
+        List<Cart> allItems = cartRepository.findAllByCustomerId(customer.getId());
         cartRepository.deleteAll(allItems);
     }
 
@@ -130,10 +130,10 @@ public class CartServiceImpl implements ICartService {
 //                        "Cart: " + id));
 //    }
 
-    private Cart getCartByUserIdAndProductId(Long userId, Long productId) {
-        return cartRepository.findByUserIdAndProductId(userId, productId)
+    private Cart getCartByUserIdAndProductId(UUID customerId, UUID productId) {
+        return cartRepository.findByCustomerIdAndProductId(customerId, productId)
                 .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND +
-                        "Cart for user: " + userId + " and product: " + productId));
+                        "Cart for customer: " + customerId + " and product: " + productId));
     }
 
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -26,7 +27,7 @@ public class CartController {
     private final ICartService cartService;
 
     @PostMapping("/add-to-cart")
-    public ResponseEntity<?> addToCart(@RequestParam Long productId){
+    public ResponseEntity<?> addToCart(@RequestParam UUID productId){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -45,7 +46,7 @@ public class CartController {
     }
 
     @DeleteMapping("/remove-from-cart")
-    public ResponseEntity<?> removeFromCart(@RequestParam Long productId){
+    public ResponseEntity<?> removeFromCart(@RequestParam UUID productId){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

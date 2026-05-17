@@ -11,13 +11,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SizeDTO {
 
-    public SizeDTO(Long id, String size, boolean isAvailable, BigDecimal price, Integer quantity, Long productId) {
+    public SizeDTO(UUID id, String size, boolean isAvailable, BigDecimal price, Integer quantity, UUID productId) {
         this.id = id;
         this.size = size;
         this.isAvailable = isAvailable;
@@ -26,7 +27,7 @@ public class SizeDTO {
         this.productId = productId;
     }
 
-    private Long id;
+    private UUID id;
 
     private String size;
 
@@ -36,6 +37,6 @@ public class SizeDTO {
 
     private Integer quantity;
 
-    private Long productId;
+    private UUID productId;
 
 }

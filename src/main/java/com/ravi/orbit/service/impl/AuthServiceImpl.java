@@ -86,12 +86,13 @@ public class AuthServiceImpl implements IAuthService {
         User user = userService.getUserByUsername(refreshToken.getUsername());
 
         Role role = roleRepository.findRoleByUsername(refreshToken.getUsername())
-                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Role of user with username: " + refreshToken.getUsername()));
+                .orElseThrow(() -> new BadRequestException(
+                        MyConstants.ERR_MSG_NOT_FOUND + "Role of user with username: " + refreshToken.getUsername()));
 
 
         // Generate new access token WITH ROLES
         String newAccessToken =
-                jwtUtil.generateJwtToken(user.getUsername(), role.getRole());
+                jwtUtil.generateJwtToken(user.getUsername(), role.getTitle());
 
         return Map.of("accessToken", newAccessToken);
     }
@@ -105,7 +106,9 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     public RefreshToken getRefreshToken(String token) {
-        return refreshTokenRepository.findByToken(token).orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Refresh Token: " + token));
+        return refreshTokenRepository.findByToken(token)
+                .orElseThrow(() -> new BadRequestException(
+                        MyConstants.ERR_MSG_NOT_FOUND + "Refresh Token: " + token));
     }
 
 }

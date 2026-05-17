@@ -10,28 +10,29 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
+import java.util.UUID;
 
-public interface UserRepository extends JpaRepository <User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT NEW com.ravi.orbit.dto.UserDTO(u.id, u.firstName, u.middleName, u.lastName, " +
-            " u.phone, u.email, u.username, u.imageUrl, r.role, u.status) " +
+            " u.phone, u.email, u.username, u.imageUrl, r.title, u.status) " +
             " FROM UserRoles ur " +
             " JOIN ur.user u " +
             " JOIN ur.role r " +
-            " WHERE r.role = :role AND u.status = :status ")
+            " WHERE r.title = :role AND u.status = :status ")
     Page<UserDTO> getUsersByRoleAndStatus(ERole role, EStatus status, Pageable pageable);
 
     @Query("SELECT NEW com.ravi.orbit.dto.UserDTO(u.id, u.firstName, u.middleName, u.lastName, " +
-            " u.phone, u.email, u.username, u.gender, u.dob, r.role, u.status, u.imageUrl, " +
+            " u.phone, u.email, u.username, u.gender, u.dob, r.title, u.status, u.imageUrl, " +
             " u.address, u.zipcode, u.state, u.countryCode ) " +
             " FROM User u " +
             " LEFT JOIN UserRoles ur ON u.id = ur.userId " +
             " LEFT JOIN Role r ON ur.roleId = r.id " +
             " WHERE u.id = :id ")
-    Optional<UserDTO> getUserDTOById(Long id);
+    Optional<UserDTO> getUserDTOById(UUID id);
 
     @Query("SELECT NEW com.ravi.orbit.dto.UserDTO(u.id, u.firstName, u.middleName, u.lastName, " +
-            " u.phone, u.email, u.username, u.gender, u.dob, r.role, u.status, u.imageUrl, " +
+            " u.phone, u.email, u.username, u.gender, u.dob, r.title, u.status, u.imageUrl, " +
             " u.address, u.zipcode, u.state, u.countryCode ) " +
             " FROM User u " +
             " LEFT JOIN UserRoles ur ON u.id = ur.userId " +

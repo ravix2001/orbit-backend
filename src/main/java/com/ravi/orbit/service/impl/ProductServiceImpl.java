@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.UUID;
 
 @Transactional
 @Service
@@ -44,14 +45,14 @@ public class ProductServiceImpl implements IProductService {
 //        Validator.validateUserSignup(categoryDTO);
 
         Category category = categoryService.getCategoryById(productDTO.getCategoryId());
-        User user = userService.getUserById(productDTO.getSellerId());
+        User seller = userService.getUserById(productDTO.getSellerId());
 
         Product product = null;
 
         if(CommonMethods.isEmpty(productDTO.getId())){
             product = new Product();
             product.setCategory(category);
-            product.setUser(user);
+            product.setSeller(seller);
         }
         else{
             product = getProductById(productDTO.getId());
@@ -65,7 +66,7 @@ public class ProductServiceImpl implements IProductService {
         productDTO.setSizes(sizes);
         productDTO.setColors(colors);
         productDTO.setCategoryId(category.getId());
-        productDTO.setSellerId(user.getId());
+        productDTO.setSellerId(seller.getId());
         return productDTO;
     }
 
@@ -115,7 +116,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDTO getProduct(Long id){
+    public ProductDTO getProduct(UUID id){
 
         ProductDTO productDTO = getProductDTOById(id);
 
@@ -155,16 +156,16 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Page<ProductDTO> getProductDTOsByCategoryId(Pageable pageable, Long categoryId){
+    public Page<ProductDTO> getProductDTOsByCategoryId(Pageable pageable, UUID categoryId){
         return productRepository.getProductDTOsByCategoryId(pageable, categoryId);
     }
 
     @Override
-    public Page<ProductDTO> getProductDTOsBySellerId(Pageable pageable, Long sellerId) {
+    public Page<ProductDTO> getProductDTOsBySellerId(Pageable pageable, UUID sellerId) {
         return productRepository.getProductDTOsBySellerId(pageable, sellerId);
     }
 
-    public ProductDTO getProductDTOById(Long id) {
+    public ProductDTO getProductDTOById(UUID id) {
         return productRepository.getProductDTOById(id)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "Product: " + id));
@@ -177,40 +178,40 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public void deleteProduct(Long id) {
+    public void deleteProduct(UUID id) {
         Product product = getProductById(id);
         product.setStatus(EStatus.DELETED);
         productRepository.save(product);
     }
 
     @Override
-    public void deleteProductHard(Long id) {   // remaining to delete its children
+    public void deleteProductHard(UUID id) {   // remaining to delete its children
         Product product = getProductById(id);
         productRepository.delete(product);
     }
 
     @Override
-    public Product getProductById(Long id) {
+    public Product getProductById(UUID id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "Product: " + id));
     }
 
-    public List<SizeDTO> getSizeDTOsByProductId(Long productId){
+    public List<SizeDTO> getSizeDTOsByProductId(UUID productId){
         return sizeRepository.getSizeDTOsByProductId(productId);
     }
 
-    public List<ColorDTO> getColorDTOsByProductId(Long productId){
+    public List<ColorDTO> getColorDTOsByProductId(UUID productId){
         return colorRepository.getColorDTOsByProductId(productId);
     }
 
-    public Size getSizeById(Long id) {
+    public Size getSizeById(UUID id) {
         return sizeRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "Size: " + id));
     }
 
-    public Color getColorById(Long id) {
+    public Color getColorById(UUID id) {
         return colorRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "Color: " + id));

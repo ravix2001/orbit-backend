@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -24,11 +25,11 @@ public class CartDTO {
 //        this.sellingPrice = sellingPrice;
 //    }
 
-    private Long id;
+    private UUID id;
 
-    private Long userId;
+    private UUID customerId;
 
-    private Long productId;
+    private List<UUID> productId;
 
     private int totalItems;
 

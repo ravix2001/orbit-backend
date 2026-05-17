@@ -15,13 +15,10 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "refresh_token")
-public class RefreshToken {
+@Table(name = "refresh_token_tbl")
+public class RefreshToken extends UIDBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
     @Column(name = "token", nullable = false, unique = true, length = 500)
     private String token;
