@@ -2,6 +2,7 @@ package com.ravi.orbit.service.impl;
 
 import com.ravi.orbit.dto.RoleDTO;
 import com.ravi.orbit.entity.Role;
+import com.ravi.orbit.enums.ERole;
 import com.ravi.orbit.enums.EStatus;
 import com.ravi.orbit.exceptions.BadRequestException;
 import com.ravi.orbit.repository.RoleRepository;
@@ -81,7 +82,7 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public RoleDTO getRoleDTOByTitle(String title){
+    public RoleDTO getRoleDTOByTitle(ERole title){
         return roleRepository.getRoleDTOByTitle(title)
                 .orElseThrow(() -> new BadRequestException(
                         MyConstants.ERR_MSG_NOT_FOUND + "Role: " + title));

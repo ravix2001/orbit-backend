@@ -32,6 +32,6 @@ public interface RoleRepository extends JpaRepository<Role, UUID> {
     @Query("SELECT NEW com.ravi.orbit.dto.RoleDTO(r.id, r.title, r.colorCode, r.status) " +
             "FROM Role r " +
             "WHERE r.title = :title")
-    Optional<RoleDTO> getRoleDTOByTitle(String title);
+    Optional<RoleDTO> getRoleDTOByTitle(ERole title);
 
 }

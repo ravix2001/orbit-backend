@@ -1,6 +1,7 @@
 package com.ravi.orbit.controller;
 
 import com.ravi.orbit.dto.RoleDTO;
+import com.ravi.orbit.enums.ERole;
 import com.ravi.orbit.service.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class RoleController {
     }
 
     @GetMapping(params = "title")
-    public ResponseEntity<RoleDTO> getRoleByTitle(@RequestParam String title){
+    public ResponseEntity<RoleDTO> getRoleByTitle(@RequestParam ERole title){
         return ResponseEntity.ok(roleService.getRoleDTOByTitle(title));
     }
 
