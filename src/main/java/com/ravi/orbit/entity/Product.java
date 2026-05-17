@@ -53,7 +53,7 @@ public class Product extends UIDBase{
     private BigDecimal sellingPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller", referencedColumnName = "id")
+    @JoinColumn(name = "seller_id", referencedColumnName = "id")
     private User seller;
 
     @Column(name = "seller_id", insertable = false, updatable = false)
