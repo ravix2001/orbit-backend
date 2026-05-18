@@ -11,6 +11,8 @@ import com.ravi.orbit.service.IOrderService;
 import com.ravi.orbit.service.IProductService;
 import com.ravi.orbit.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -25,8 +27,13 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
 
     @Override
-    public OrderDTO getOrdersByCustomerId(UUID customerId){
-        return orderRepository.getOrdersByCustomerId(customerId);
+    public Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable){
+        return orderRepository.getOrdersByCustomerId(customerId, pageable);
+    }
+
+    @Override
+    public Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable){
+        return orderRepository.getOrdersBySellerId(sellerId, pageable);
     }
 
 //    @Override
