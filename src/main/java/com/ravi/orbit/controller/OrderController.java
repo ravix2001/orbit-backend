@@ -48,7 +48,7 @@ public class OrderController {
     public ResponseEntity<Page<OrderDTO>> getOrdersBySeller(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "orderNumber") String sortBy,
             @RequestParam(defaultValue = "true") boolean ascending){
 
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();

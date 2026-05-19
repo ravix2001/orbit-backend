@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,17 +16,20 @@ import java.util.UUID;
 public class OrderDTO {
 
     public OrderDTO(UUID id, Long orderNumber, int totalItems, BigDecimal totalMarketPrice,
-                    BigDecimal totalDiscount, BigDecimal totalSellingPrice, EOrderStatus orderStatus,
-                    LocalDateTime orderDate, LocalDateTime deliveryDate) {
+                    BigDecimal totalDiscount, BigDecimal totalAmount, EOrderStatus orderStatus,
+                    LocalDateTime orderDate, LocalDateTime deliveryDate, UUID customerId, UUID sellerId, UUID productId) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.totalItems = totalItems;
         this.totalMarketPrice = totalMarketPrice;
         this.totalDiscount = totalDiscount;
-        this.totalSellingPrice = totalSellingPrice;
+        this.totalAmount = totalAmount;
         this.orderStatus = orderStatus;
-        this.orderDate = orderDate;
-        this.deliveryDate = deliveryDate;
+        this.orderDate = orderDate.toLocalDate();
+        this.deliveryDate = deliveryDate.toLocalDate();
+        this.customerId = customerId;
+        this.sellerId = sellerId;
+        this.productId = productId;
     }
 
     private UUID id;
@@ -38,16 +42,16 @@ public class OrderDTO {
 
     private BigDecimal totalDiscount;
 
-    private BigDecimal totalSellingPrice;
+    private BigDecimal totalAmount;
 
     private EOrderStatus orderStatus;
 
 //    @Embedded
 //    private PaymentDetails paymentDetails = new PaymentDetails();
 
-    private LocalDateTime orderDate;
+    private LocalDate orderDate;
 
-    private LocalDateTime deliveryDate;
+    private LocalDate deliveryDate;
 
     private UUID customerId;
 

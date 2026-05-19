@@ -37,7 +37,13 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable){
-        return orderRepository.getOrdersByCustomerId(customerId, pageable);
+        Page<OrderDTO> orderDTOs = orderRepository.getOrdersByCustomerId(customerId, pageable);
+        for (OrderDTO orderDTO : orderDTOs) {
+            orderDTO.setCustomer(userService.getUserDTOById(orderDTO.getCustomerId()));
+            orderDTO.setSeller(userService.getUserDTOById(orderDTO.getSellerId()));
+            orderDTO.setProduct(productService.getProduct(orderDTO.getProductId()));
+        }
+        return orderDTOs;
     }
 
     @Override
@@ -98,7 +104,7 @@ public class OrderServiceImpl implements IOrderService {
         order.setTotalItems(request.getTotalItems());
 
         order.setTotalMarketPrice(totalMarketPrice);
-        order.setTotalSellingPrice(totalSellingPrice);
+        order.setTotalAmount(totalSellingPrice);
         order.setTotalDiscount(totalDiscount);
 
         order.setOrderStatus(
@@ -127,7 +133,9 @@ public class OrderServiceImpl implements IOrderService {
 
         request.setCustomer(userService.getUserDTOById(customer.getId()));
 
-        request.setSellerId(seller.getId());
+        request.setSeller(userService.getUserDTOById(seller.getId()));
+
+        request.setProduct(productService.getProduct(product.getId()));
 
         request.setOrderNumber(order.getOrderNumber());
 
@@ -135,11 +143,11 @@ public class OrderServiceImpl implements IOrderService {
 
         request.setTotalItems(order.getTotalItems());
         request.setTotalMarketPrice(order.getTotalMarketPrice());
-        request.setTotalSellingPrice(order.getTotalSellingPrice());
+        request.setTotalAmount(order.getTotalAmount());
         request.setTotalDiscount(order.getTotalDiscount());
 
-        request.setOrderDate(order.getOrderDate());
-        request.setDeliveryDate(order.getDeliveryDate());
+        request.setOrderDate(order.getOrderDate().toLocalDate());
+        request.setDeliveryDate(order.getDeliveryDate().toLocalDate());
 
         return request;
     }

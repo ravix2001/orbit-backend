@@ -30,8 +30,8 @@ public class Order extends UIDBase {
     @Column(name = "total_discount")
     private BigDecimal totalDiscount;
 
-    @Column(name = "total_selling_price")
-    private BigDecimal totalSellingPrice;
+    @Column(name = "total_amount")
+    private BigDecimal totalAmount;
 
     @Column(name = "order_status", unique = true)
     private EOrderStatus orderStatus = EOrderStatus.PENDING;
