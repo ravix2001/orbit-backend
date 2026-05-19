@@ -14,18 +14,18 @@ import java.util.UUID;
 public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
-            " o.totalDiscount, o.totalSellingPrice, o.orderStatus, o.orderDate, o.deliveryDate ) " +
+            " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, o.customerId, o.sellerId, o.productId ) " +
             " FROM Order o " +
             " WHERE o.customerId = :customerId ")
     Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable);
 
     @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
-            " o.totalDiscount, o.totalSellingPrice, o.orderStatus, o.orderDate, o.deliveryDate ) " +
+            " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, o.customerId, o.sellerId, o.productId ) " +
             " FROM Order o " +
             " WHERE o.sellerId = :sellerId ")
     Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
 
-    List<Order> customer(User customer);
+    @Query("SELECT MAX(o.orderNumber) FROM Order o")
+    Long findMaxOrderNumber();
 
-    UUID seller(User seller);
 }

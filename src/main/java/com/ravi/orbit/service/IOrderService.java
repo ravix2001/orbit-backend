@@ -1,6 +1,7 @@
 package com.ravi.orbit.service;
 
 import com.ravi.orbit.dto.OrderDTO;
+import com.ravi.orbit.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,6 +13,6 @@ public interface IOrderService {
 
     Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
 
-//    OrderDTO createOrder(OrderDTO request);
+    OrderDTO createOrder(OrderDTO request, User customer);
 
 }
