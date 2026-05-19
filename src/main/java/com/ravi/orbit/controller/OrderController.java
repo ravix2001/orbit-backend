@@ -58,10 +58,10 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersBySellerId(user.getId(), pageable));
     }
 
-
-//    @PostMapping("/createOrder")
-//    public Object createOrder(@RequestBody OrderDTO orderDTO){
-//        return ResponseEntity.ok(orderService.createOrder(orderDTO));
-//    }
+    @PostMapping("/createOrder")
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
+        User customer = userService.getUserPrincipal();
+        return ResponseEntity.ok(orderService.createOrder(orderDTO, customer));
+    }
 
 }

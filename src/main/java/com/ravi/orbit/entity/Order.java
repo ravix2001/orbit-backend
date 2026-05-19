@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -24,15 +25,15 @@ public class Order extends UIDBase {
     private int totalItems;
 
     @Column(name = "total_market_price")
-    private double totalMarketPrice;
+    private BigDecimal totalMarketPrice;
 
     @Column(name = "total_discount")
-    private double totalDiscount;
+    private BigDecimal totalDiscount;
 
     @Column(name = "total_selling_price")
-    private double totalSellingPrice;
+    private BigDecimal totalSellingPrice;
 
-    @Column(name = "order_status")
+    @Column(name = "order_status", unique = true)
     private EOrderStatus orderStatus = EOrderStatus.PENDING;
 
 //    @Embedded

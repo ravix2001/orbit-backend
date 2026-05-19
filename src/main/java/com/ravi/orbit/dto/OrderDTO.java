@@ -5,6 +5,7 @@ import com.ravi.orbit.enums.EOrderStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -13,8 +14,8 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OrderDTO {
 
-    public OrderDTO(UUID id, Long orderNumber, int totalItems, double totalMarketPrice,
-                    double totalDiscount, double totalSellingPrice, EOrderStatus orderStatus,
+    public OrderDTO(UUID id, Long orderNumber, int totalItems, BigDecimal totalMarketPrice,
+                    BigDecimal totalDiscount, BigDecimal totalSellingPrice, EOrderStatus orderStatus,
                     LocalDateTime orderDate, LocalDateTime deliveryDate) {
         this.id = id;
         this.orderNumber = orderNumber;
@@ -33,11 +34,11 @@ public class OrderDTO {
 
     private int totalItems;
 
-    private double totalMarketPrice;
+    private BigDecimal totalMarketPrice;
 
-    private double totalDiscount;
+    private BigDecimal totalDiscount;
 
-    private double totalSellingPrice;
+    private BigDecimal totalSellingPrice;
 
     private EOrderStatus orderStatus;
 

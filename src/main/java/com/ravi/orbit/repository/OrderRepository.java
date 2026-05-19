@@ -25,7 +25,7 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
             " WHERE o.sellerId = :sellerId ")
     Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
 
-    List<Order> customer(User customer);
+    @Query("SELECT MAX(o.orderNumber) FROM Order o")
+    Long findMaxOrderNumber();
 
-    UUID seller(User seller);
 }
