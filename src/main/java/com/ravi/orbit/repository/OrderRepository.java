@@ -9,9 +9,22 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderRepository extends JpaRepository<Order, UUID> {
+
+    @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
+            " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, o.customerId, o.sellerId, o.productId ) " +
+            " FROM Order o " +
+            " WHERE o.id = :id ")
+    Optional<OrderDTO> getOrderById(UUID id);
+
+    @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
+            " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, o.customerId, o.sellerId, o.productId ) " +
+            " FROM Order o " +
+            " WHERE o.orderNumber = :orderNumber ")
+    Optional<OrderDTO> getOrderByOrderNumber(Long orderNumber);
 
     @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
             " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, o.customerId, o.sellerId, o.productId ) " +

@@ -36,22 +36,6 @@ public class OrderServiceImpl implements IOrderService {
     private final ProductRepository productRepository;
 
     @Override
-    public Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable){
-        Page<OrderDTO> orderDTOs = orderRepository.getOrdersByCustomerId(customerId, pageable);
-        for (OrderDTO orderDTO : orderDTOs) {
-            orderDTO.setCustomer(userService.getUserDTOById(orderDTO.getCustomerId()));
-            orderDTO.setSeller(userService.getUserDTOById(orderDTO.getSellerId()));
-            orderDTO.setProduct(productService.getProduct(orderDTO.getProductId()));
-        }
-        return orderDTOs;
-    }
-
-    @Override
-    public Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable){
-        return orderRepository.getOrdersBySellerId(sellerId, pageable);
-    }
-
-    @Override
     public OrderDTO createOrder(OrderDTO request, User customer) {
 
         Product product = productService.getProductById(request.getProductId());
@@ -162,5 +146,50 @@ public class OrderServiceImpl implements IOrderService {
         }
     }
 
+    @Override
+    public OrderDTO getOrderById(UUID id) {
+        OrderDTO orderDTO = orderRepository.getOrderById(id)
+                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Order: " + id));
+
+        orderDTO.setCustomer(userService.getUserDTOById(orderDTO.getCustomerId()));
+        orderDTO.setSeller(userService.getUserDTOById(orderDTO.getSellerId()));
+        orderDTO.setProduct(productService.getProduct(orderDTO.getProductId()));
+
+        return orderDTO;
+    }
+
+    @Override
+    public OrderDTO getOrderByOrderNumber(Long orderNumber) {
+        OrderDTO orderDTO = orderRepository.getOrderByOrderNumber(orderNumber)
+                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Order: " + orderNumber));
+
+        orderDTO.setCustomer(userService.getUserDTOById(orderDTO.getCustomerId()));
+        orderDTO.setSeller(userService.getUserDTOById(orderDTO.getSellerId()));
+        orderDTO.setProduct(productService.getProduct(orderDTO.getProductId()));
+
+        return orderDTO;
+    }
+
+    @Override
+    public Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable){
+        Page<OrderDTO> orderDTOs = orderRepository.getOrdersByCustomerId(customerId, pageable);
+        for (OrderDTO orderDTO : orderDTOs) {
+            orderDTO.setCustomer(userService.getUserDTOById(orderDTO.getCustomerId()));
+            orderDTO.setSeller(userService.getUserDTOById(orderDTO.getSellerId()));
+            orderDTO.setProduct(productService.getProduct(orderDTO.getProductId()));
+        }
+        return orderDTOs;
+    }
+
+    @Override
+    public Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable){
+        Page<OrderDTO> orderDTOs = orderRepository.getOrdersBySellerId(sellerId, pageable);
+        for (OrderDTO orderDTO : orderDTOs) {
+            orderDTO.setCustomer(userService.getUserDTOById(orderDTO.getCustomerId()));
+            orderDTO.setSeller(userService.getUserDTOById(orderDTO.getSellerId()));
+            orderDTO.setProduct(productService.getProduct(orderDTO.getProductId()));
+        }
+        return orderDTOs;
+    }
 
 }

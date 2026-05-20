@@ -30,8 +30,25 @@ public class OrderController {
 
     private final IUserService userService;
 
-    @GetMapping("/customer")
+    @PostMapping("/createOrder")
+    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
+        User customer = userService.getUserPrincipal();
+        return ResponseEntity.ok(orderService.createOrder(orderDTO, customer));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable UUID id){
+        return ResponseEntity.ok(orderService.getOrderById(id));
+    }
+
+    @GetMapping(params = "orderNumber")
+    public ResponseEntity<OrderDTO> getOrderById(@RequestParam Long orderNumber){
+        return ResponseEntity.ok(orderService.getOrderByOrderNumber(orderNumber));
+    }
+
+    @GetMapping(params = "customerId")
     public ResponseEntity<Page<OrderDTO>> getOrdersByCustomer(
+            @RequestParam UUID customerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "id") String sortBy,
@@ -40,12 +57,12 @@ public class OrderController {
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        User user = userService.getUserPrincipal();
-        return ResponseEntity.ok(orderService.getOrdersByCustomerId(user.getId(), pageable));
+        return ResponseEntity.ok(orderService.getOrdersByCustomerId(customerId, pageable));
     }
 
-    @GetMapping("/seller")
+    @GetMapping(params = "sellerId")
     public ResponseEntity<Page<OrderDTO>> getOrdersBySeller(
+            @RequestParam UUID sellerId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "orderNumber") String sortBy,
@@ -54,14 +71,7 @@ public class OrderController {
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        User user = userService.getUserPrincipal();
-        return ResponseEntity.ok(orderService.getOrdersBySellerId(user.getId(), pageable));
-    }
-
-    @PostMapping("/createOrder")
-    public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
-        User customer = userService.getUserPrincipal();
-        return ResponseEntity.ok(orderService.createOrder(orderDTO, customer));
+        return ResponseEntity.ok(orderService.getOrdersBySellerId(sellerId, pageable));
     }
 
 }
