@@ -53,6 +53,15 @@ public class Order extends UIDBase {
     @Column(name = "customer_id", insertable = false, updatable = false)
     private UUID customerId;
 
+    @Column(name = "customer_name")
+    private String customerName;
+
+    @Column(name = "customer_phone")
+    private String customerPhone;
+
+    @Column(name = "customer_image")
+    private String customerImage;
+
     // Seller
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", referencedColumnName = "id")
@@ -60,6 +69,15 @@ public class Order extends UIDBase {
 
     @Column(name = "seller_id", insertable = false, updatable = false)
     private UUID sellerId;
+
+    @Column(name = "seller_name")
+    private String sellerName;
+
+    @Column(name = "seller_phone")
+    private String sellerPhone;
+
+    @Column(name = "seller_image")
+    private String sellerImage;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")

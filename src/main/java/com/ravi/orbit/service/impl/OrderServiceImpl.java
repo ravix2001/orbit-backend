@@ -14,6 +14,7 @@ import com.ravi.orbit.repository.ProductRepository;
 import com.ravi.orbit.service.IOrderService;
 import com.ravi.orbit.service.IProductService;
 import com.ravi.orbit.service.IUserService;
+import com.ravi.orbit.utils.CommonMethods;
 import com.ravi.orbit.utils.MyConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -82,6 +83,13 @@ public class OrderServiceImpl implements IOrderService {
         order.setCustomer(customer);
         order.setSeller(seller);
         order.setProduct(product);
+
+        order.setCustomerName(CommonMethods.getName(customer.getFirstName(), customer.getMiddleName(), customer.getLastName()));
+        order.setCustomerPhone(customer.getPhone());
+        order.setCustomerImage(customer.getImageUrl());
+        order.setSellerName(CommonMethods.getName(seller.getFirstName(), seller.getMiddleName(), seller.getLastName()));
+        order.setSellerPhone(seller.getPhone());
+        order.setSellerImage(seller.getImageUrl());
 
         order.setOrderNumber(getOrderNumber());
 
@@ -172,24 +180,12 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable){
-        Page<OrderDTO> orderDTOs = orderRepository.getOrdersByCustomerId(customerId, pageable);
-        for (OrderDTO orderDTO : orderDTOs) {
-            orderDTO.setCustomer(userService.getUserDTOById(orderDTO.getCustomerId()));
-            orderDTO.setSeller(userService.getUserDTOById(orderDTO.getSellerId()));
-            orderDTO.setProduct(productService.getProduct(orderDTO.getProductId()));
-        }
-        return orderDTOs;
+        return orderRepository.getOrdersByCustomerId(customerId, pageable);
     }
 
     @Override
     public Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable){
-        Page<OrderDTO> orderDTOs = orderRepository.getOrdersBySellerId(sellerId, pageable);
-        for (OrderDTO orderDTO : orderDTOs) {
-            orderDTO.setCustomer(userService.getUserDTOById(orderDTO.getCustomerId()));
-            orderDTO.setSeller(userService.getUserDTOById(orderDTO.getSellerId()));
-            orderDTO.setProduct(productService.getProduct(orderDTO.getProductId()));
-        }
-        return orderDTOs;
+        return orderRepository.getOrdersBySellerId(sellerId, pageable);
     }
 
 }
