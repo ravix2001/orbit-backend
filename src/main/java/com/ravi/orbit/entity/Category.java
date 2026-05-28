@@ -16,6 +16,7 @@ public class Category extends UIDBase {
     @Column(name = "name")
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private EStatus status = EStatus.ACTIVE;
 

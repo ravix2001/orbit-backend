@@ -33,6 +33,29 @@ public class CommonMethods {
         return isEmpty;
     }
 
+    public static String getName(String firstName, String lastName) {
+        // Check if the input strings are null and assign them an empty string if they
+        // are
+        firstName = firstName != null ? firstName.trim() : "";
+        lastName = lastName != null ? lastName.trim() : "";
+
+        // Use StringBuilder for efficiency in string concatenation
+        StringBuilder fullName = new StringBuilder();
+
+        // Append first name
+        fullName.append(firstName);
+
+        // Append last name if it's not empty
+        if (!lastName.isEmpty()) {
+            if (fullName.length() > 0) {
+                fullName.append(" "); // Add space before last name if necessary
+                fullName.append(lastName);
+            }
+        }
+
+        return fullName.toString();
+    }
+
     public static String getName(String firstName, String middleName, String lastName) {
         // Check if the input strings are null and assign them an empty string if they
         // are

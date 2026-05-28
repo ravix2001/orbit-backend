@@ -33,7 +33,8 @@ public class Order extends UIDBase {
     @Column(name = "total_amount")
     private BigDecimal totalAmount;
 
-    @Column(name = "order_status", unique = true)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "order_status")
     private EOrderStatus orderStatus = EOrderStatus.PENDING;
 
 //    @Embedded
@@ -45,7 +46,6 @@ public class Order extends UIDBase {
     @Column(name = "delivery_date")
     private LocalDateTime deliveryDate = orderDate.plusDays(3);     // delivery date = 3 days of order date
 
-    // Customer
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private User customer;
@@ -53,19 +53,13 @@ public class Order extends UIDBase {
     @Column(name = "customer_id", insertable = false, updatable = false)
     private UUID customerId;
 
-    // Seller
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", referencedColumnName = "id")
-    private User seller;
+    @Column(name = "customer_name")
+    private String customerName;
 
-    @Column(name = "seller_id", insertable = false, updatable = false)
-    private UUID sellerId;
+    @Column(name = "customer_phone")
+    private String customerPhone;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
-
-    @Column(name = "product_id", insertable = false, updatable = false)
-    private UUID productId;
+    @Column(name = "customer_image")
+    private String customerImage;
 
 }

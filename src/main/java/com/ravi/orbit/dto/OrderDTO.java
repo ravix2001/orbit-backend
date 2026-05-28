@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Data
@@ -17,7 +19,8 @@ public class OrderDTO {
 
     public OrderDTO(UUID id, Long orderNumber, int totalItems, BigDecimal totalMarketPrice,
                     BigDecimal totalDiscount, BigDecimal totalAmount, EOrderStatus orderStatus,
-                    LocalDateTime orderDate, LocalDateTime deliveryDate, UUID customerId, UUID sellerId, UUID productId) {
+                    LocalDateTime orderDate, LocalDateTime deliveryDate,
+                    UUID customerId, String customerName, String customerPhone, String customerImage) {
         this.id = id;
         this.orderNumber = orderNumber;
         this.totalItems = totalItems;
@@ -28,8 +31,14 @@ public class OrderDTO {
         this.orderDate = orderDate.toLocalDate();
         this.deliveryDate = deliveryDate.toLocalDate();
         this.customerId = customerId;
-        this.sellerId = sellerId;
-        this.productId = productId;
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
+        this.customerImage = customerImage;
+//        this.sellerId = sellerId;
+//        this.sellerName = sellerName;
+//        this.sellerPhone = sellerPhone;
+//        this.sellerImage = sellerImage;
+//        this.productId = productId;
     }
 
     private UUID id;
@@ -55,14 +64,30 @@ public class OrderDTO {
 
     private UUID customerId;
 
+    private String customerName;
+
+    private String customerPhone;
+
+    private String customerImage;
+
     private UserDTO customer;
 
-    private UUID sellerId;
-
-    private UserDTO seller;
-
+//    private UUID sellerId;
+//
+//    private String sellerName;
+//
+//    private String sellerPhone;
+//
+//    private String sellerImage;
+//
+//    private UserDTO seller;
+//
     private UUID productId;
 
     private ProductDTO product;
+
+    private Map<UUID, Integer> variantQuantities; // variantId -> quantity
+
+    private List<OrderItemDTO> orderItems;
 
 }

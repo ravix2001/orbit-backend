@@ -1,20 +1,18 @@
 package com.ravi.orbit.service.impl;
 
-import com.ravi.orbit.dto.*;
+import com.ravi.orbit.dto.ProductDTO;
+import com.ravi.orbit.dto.ProductVariantDTO;
 import com.ravi.orbit.entity.Category;
-import com.ravi.orbit.entity.Color;
 import com.ravi.orbit.entity.Product;
-import com.ravi.orbit.entity.Size;
+import com.ravi.orbit.entity.ProductVariant;
 import com.ravi.orbit.entity.User;
 import com.ravi.orbit.enums.EStatus;
 import com.ravi.orbit.exceptions.BadRequestException;
-import com.ravi.orbit.repository.ColorRepository;
 import com.ravi.orbit.repository.ProductRepository;
-import com.ravi.orbit.repository.SizeRepository;
+import com.ravi.orbit.repository.ProductVariantRepository;
 import com.ravi.orbit.service.ICategoryService;
 import com.ravi.orbit.service.IProductService;
 import com.ravi.orbit.service.IUserService;
-import com.ravi.orbit.utils.CommonMethods;
 import com.ravi.orbit.utils.MyConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,78 +35,156 @@ public class ProductServiceImpl implements IProductService {
     private final IUserService userService;
 
     private final ProductRepository productRepository;
-    private final SizeRepository sizeRepository;
-    private final ColorRepository colorRepository;
+    private final ProductVariantRepository productVariantRepository;
 
     @Override
-    public ProductDTO handleProduct(ProductDTO productDTO) {
+    public ProductDTO createProduct(ProductDTO request) {
 
-//        Validator.validateUserSignup(categoryDTO);
+        User seller = userService.getUserPrincipal();
 
-        Category category = categoryService.getCategoryById(productDTO.getCategoryId());
-        User seller = userService.getUserById(productDTO.getSellerId());
+        Category category = categoryService.getCategoryById(request.getCategoryId());
 
-        Product product = null;
+        /*
+         * PRODUCT
+         */
+        Product product = new Product();
 
-        if(CommonMethods.isEmpty(productDTO.getId())){
-            product = new Product();
-            product.setCategory(category);
-            product.setSeller(seller);
+        product.setSeller(seller);
+
+        product.setCategory(category);
+
+        product.setCode(request.getCode() != null ? request.getCode() : generateProductCode());
+
+        product.setName(request.getName());
+
+        product.setBrand(request.getBrand());
+
+        product.setFeatures(request.getFeatures());
+
+        product.setDescription(request.getDescription());
+
+        product.setStatus(EStatus.ACTIVE);
+
+        product.setImageUrl(request.getImageUrl());
+
+        BigDecimal marketPrice = request.getMarketPrice();
+        BigDecimal sellingPrice = request.getSellingPrice();
+
+        BigDecimal discountPercent = request.getDiscountPercent();
+        BigDecimal discountAmount = request.getDiscountAmount();
+
+        /*
+         * CASE 1:
+         * DISCOUNT PERCENT PROVIDED
+         */
+        if (discountPercent != null && discountPercent.compareTo(BigDecimal.ZERO) > 0) {
+
+            discountAmount = marketPrice.multiply(discountPercent).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+            sellingPrice = marketPrice.subtract(discountAmount);
         }
-        else{
-            product = getProductById(productDTO.getId());
+
+        /*
+         * CASE 2:
+         * DISCOUNT AMOUNT PROVIDED
+         */
+        else if (discountAmount != null && discountAmount.compareTo(BigDecimal.ZERO) > 0) {
+
+            discountPercent = discountAmount.multiply(BigDecimal.valueOf(100)).divide(marketPrice, 2, RoundingMode.HALF_UP);
+
+            sellingPrice = marketPrice.subtract(discountAmount);
         }
-        productRepository.save(mapToProductEntity(product, productDTO));
 
-        List<SizeDTO> sizes = handleSizes(productDTO.getSizes(), product);
-        List<ColorDTO> colors = handleColors(productDTO.getColors(), product);
+        /*
+         * SET PRICES
+         */
+        product.setMarketPrice(marketPrice);
 
-        productDTO.setId(product.getId());
-        productDTO.setSizes(sizes);
-        productDTO.setColors(colors);
-        productDTO.setCategoryId(category.getId());
-        productDTO.setSellerId(seller.getId());
-        return productDTO;
-    }
+        product.setSellingPrice(sellingPrice);
 
-    public List<SizeDTO> handleSizes(List<SizeDTO> sizes, Product product){
-        for(SizeDTO sizeDTO : sizes){
-            Size size = null;
-            if(CommonMethods.isEmpty(sizeDTO.getId())){
-                size = new Size();
-                size.setProduct(product);
+        product.setDiscountPercent(discountPercent);
+
+        product.setDiscountAmount(discountAmount);
+
+        /*
+         * SAVE PRODUCT FIRST
+         */
+        Product savedProduct = productRepository.save(product);
+
+        /*
+         * VARIANTS
+         */
+        List<ProductVariant> variants = new ArrayList<>();
+
+        /*
+         * CASE 1:
+         * PRODUCT HAS VARIANTS
+         */
+        if (request.getVariants() != null && !request.getVariants().isEmpty()) {
+
+            for (ProductVariantDTO variantDTO : request.getVariants()) {
+
+                ProductVariant variant = new ProductVariant();
+
+                variant.setProduct(savedProduct);
+
+                variant.setColor(variantDTO.getColor());
+
+                variant.setSize(variantDTO.getSize());
+
+                variant.setQuantity(variantDTO.getQuantity());
+
+                variant.setIsAvailable(variantDTO.getQuantity() > 0);
+
+                variant.setAdditionalPrice(variantDTO.getAdditionalPrice());
+
+                variant.setSku(generateSku(savedProduct.getCode(), variantDTO.getColor(), variantDTO.getSize()));
+
+                variants.add(variant);
+
+                variantDTO.setId(variant.getId());
+                variantDTO.setSku(variant.getSku());
             }
-            else{
-                size = getSizeById(sizeDTO.getId());
-            }
-            size.setSize(sizeDTO.getSize());
-            size.setAvailable(sizeDTO.isAvailable());
-            size.setPrice(sizeDTO.getPrice());
-            size.setQuantity(sizeDTO.getQuantity());
-            sizeRepository.save(size);
-            sizeDTO.setId(size.getId());
+
         }
-        return sizes;
-    }
 
-    public List<ColorDTO> handleColors(List<ColorDTO> colors, Product product){
-        for(ColorDTO colorDTO : colors){
-            Color color = null;
-            if(CommonMethods.isEmpty(colorDTO.getId())){
-                color = new Color();
-                color.setProduct(product);
-            }
-            else{
-                color = getColorById(colorDTO.getId());
-            }
-            color.setColor(colorDTO.getColor());
-            color.setAvailable(colorDTO.isAvailable());
-            color.setPrice(colorDTO.getPrice());
-            color.setQuantity(colorDTO.getQuantity());
-            colorRepository.save(color);
-            colorDTO.setId(color.getId());
+        /*
+         * CASE 2:
+         * NO VARIANTS
+         * CREATE DEFAULT VARIANT
+         */
+        else {
+
+            ProductVariant defaultVariant = new ProductVariant();
+
+            defaultVariant.setProduct(savedProduct);
+
+            defaultVariant.setColor(null);
+
+            defaultVariant.setSize(null);
+
+            defaultVariant.setQuantity(request.getQuantity());
+
+            defaultVariant.setIsAvailable(request.getQuantity() > 0);
+
+            defaultVariant.setAdditionalPrice(BigDecimal.ZERO);
+
+            defaultVariant.setSku(generateDefaultSku(savedProduct.getCode()));
+
+            variants.add(defaultVariant);
         }
-        return colors;
+
+        /*
+         * SAVE ALL VARIANTS
+         */
+        productVariantRepository.saveAll(variants);
+
+        request.setId(savedProduct.getId());
+        request.setCode(savedProduct.getCode());
+        request.setSellingPrice(savedProduct.getSellingPrice());
+        request.setStatus(savedProduct.getStatus());
+
+        return request;
     }
 
     @Override
@@ -116,18 +193,13 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDTO getProduct(UUID id){
+    public ProductDTO getProduct(UUID productId){
 
-        ProductDTO productDTO = getProductDTOById(id);
+        ProductDTO productDTO = getProductDTOById(productId);
 
-        List<SizeDTO> sizes = getSizeDTOsByProductId(id);
-        if(sizes != null){
-            productDTO.setSizes(sizes);
-        }
-        List<ColorDTO> colors = getColorDTOsByProductId(id);
-        if(colors != null){
-            productDTO.setColors(colors);
-        }
+        List<ProductVariantDTO> variants = getProductVariantsDTOByProductId(productId);
+
+        productDTO.setVariants(variants);
 
         return productDTO;
     }
@@ -137,14 +209,9 @@ public class ProductServiceImpl implements IProductService {
 
         ProductDTO productDTO = getProductDTOByCode(code);
 
-        List<SizeDTO> sizes = getSizeDTOsByProductId(productDTO.getId());
-        if(sizes != null){
-            productDTO.setSizes(sizes);
-        }
-        List<ColorDTO> colors = getColorDTOsByProductId(productDTO.getId());
-        if(colors != null){
-            productDTO.setColors(colors);
-        }
+        List<ProductVariantDTO> variants = getProductVariantsDTOByProductId(productDTO.getId());
+
+        productDTO.setVariants(variants);
 
         return productDTO;
     }
@@ -197,24 +264,26 @@ public class ProductServiceImpl implements IProductService {
                         .ERR_MSG_NOT_FOUND + "Product: " + id));
     }
 
-    public List<SizeDTO> getSizeDTOsByProductId(UUID productId){
-        return sizeRepository.getSizeDTOsByProductId(productId);
+    public List<ProductVariantDTO> getProductVariantsDTOByProductId(UUID productId){
+        return productVariantRepository.getProductVariantsByProductId(productId);
     }
 
-    public List<ColorDTO> getColorDTOsByProductId(UUID productId){
-        return colorRepository.getColorDTOsByProductId(productId);
+    public List<ProductVariant> getProductVariantsByProductId(UUID id) {
+        return productVariantRepository.findAllByProductId(id);
     }
 
-    public Size getSizeById(UUID id) {
-        return sizeRepository.findById(id)
+    @Override
+    public ProductVariant getProductVariantById(UUID variantId) {
+        return productVariantRepository.findById(variantId)
                 .orElseThrow(() -> new BadRequestException(MyConstants
-                        .ERR_MSG_NOT_FOUND + "Size: " + id));
+                        .ERR_MSG_NOT_FOUND + "Product Variant: " + variantId));
     }
 
-    public Color getColorById(UUID id) {
-        return colorRepository.findById(id)
+    @Override
+    public ProductVariantDTO getProductVariantDTOById(UUID variantId) {
+        return productVariantRepository.getProductVariantById(variantId)
                 .orElseThrow(() -> new BadRequestException(MyConstants
-                        .ERR_MSG_NOT_FOUND + "Color: " + id));
+                        .ERR_MSG_NOT_FOUND + "Product Variant: " + variantId));
     }
 
     private Product mapToProductEntity(Product product, ProductDTO productDTO) {
@@ -223,7 +292,6 @@ public class ProductServiceImpl implements IProductService {
         product.setBrand(productDTO.getBrand());
         product.setFeatures(productDTO.getFeatures());
         product.setDescription(productDTO.getDescription());
-        product.setQuantity(productDTO.getQuantity());
         product.setMarketPrice(productDTO.getMarketPrice());
         product.setDiscountPercent(productDTO.getDiscountPercent());
 
@@ -244,6 +312,20 @@ public class ProductServiceImpl implements IProductService {
         product.setImageUrl(productDTO.getImageUrl());
 
         return product;
+    }
+
+    private String generateProductCode() {
+        return "PRD-" + System.currentTimeMillis();
+    }
+
+    private String generateSku(String productCode, String color, String size) {
+        String colorPart = color != null ? color.toUpperCase() : "DEFAULT";
+        String sizePart = size != null ? size.toUpperCase() : "STD";
+        return productCode + "-" + colorPart + "-" + sizePart;
+    }
+
+    private String generateDefaultSku(String productCode) {
+        return productCode + "-DEFAULT";
     }
 
 }

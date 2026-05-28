@@ -31,18 +31,11 @@ public class Cart extends UIDBase {
 //    @Column(name = "selling_price")
 //    private BigDecimal sellingPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private User customer;
 
     @Column(name = "customer_id", insertable = false, updatable = false)
     private UUID customerId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
-
-    @Column(name = "product_id", insertable = false, updatable = false)
-    private UUID productId;
 
 }

@@ -27,41 +27,24 @@ public class CartController {
     private final ICartService cartService;
 
     @PostMapping("/add-to-cart")
-    public ResponseEntity<?> addToCart(@RequestParam UUID productId){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        cartService.addToCart(username, productId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> addToCart(@RequestBody CartDTO cartDTO){
+        return ResponseEntity.ok(cartService.addToCart(cartDTO));
     }
 
     @GetMapping("/my-cart")
     public ResponseEntity<CartDTO> getMyCart(){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        return ResponseEntity.ok(cartService.getCartByUsername(username));
+        return ResponseEntity.ok(cartService.getMyCart());
     }
 
     @DeleteMapping("/remove-from-cart")
     public ResponseEntity<?> removeFromCart(@RequestParam UUID productId){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        cartService.removeFromCart(username, productId);
+        cartService.removeItemsFromCart(productId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/clean-cart")
     public ResponseEntity<?> removeAllFromCart(){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        cartService.removeAllFromCart(username);
+        cartService.removeAllFromCart();
         return ResponseEntity.ok().build();
     }
 

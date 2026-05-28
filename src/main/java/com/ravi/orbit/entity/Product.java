@@ -31,26 +31,24 @@ public class Product extends UIDBase{
     @Column(name = "description")
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private EStatus status = EStatus.ACTIVE;
-
-    @Column(name = "quantity")
-    private int quantity;
 
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "market_price")
-    private BigDecimal marketPrice;
+    @Column(name = "market_price", precision = 10, scale = 2)
+    private BigDecimal marketPrice = BigDecimal.ZERO;
 
-    @Column(name = "discount_percent")
-    private BigDecimal discountPercent;
+    @Column(name = "selling_price", precision = 10, scale = 2)
+    private BigDecimal sellingPrice = BigDecimal.ZERO;
 
-    @Column(name = "discount_amount")
-    private BigDecimal discountAmount;
+    @Column(name = "discount_percent", precision = 10, scale = 2)
+    private BigDecimal discountPercent = BigDecimal.ZERO;
 
-    @Column(name = "selling_price")
-    private BigDecimal sellingPrice;
+    @Column(name = "discount_amount", precision = 10, scale = 2)
+    private BigDecimal discountAmount = BigDecimal.ZERO;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id", referencedColumnName = "id")
