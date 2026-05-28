@@ -17,7 +17,7 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
             " v.additionalPrice, v.sku) " +
             " FROM ProductVariant v " +
             " LEFT JOIN Product p ON v.productId = p.id " +
-            " WHERE v.productId = :prodcutId ")
+            " WHERE v.productId = :productId ")
     List<ProductVariantDTO> getProductVariantsByProductId(UUID productId);
 
     List<ProductVariant> findAllByProductId(UUID productId);
