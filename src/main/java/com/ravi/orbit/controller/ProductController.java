@@ -19,9 +19,14 @@ public class ProductController {
 
     private final IProductService productService;
 
+//    @PostMapping("/handleProduct")
+//    public ResponseEntity<ProductDTO> handleProduct(@RequestBody ProductDTO productDTO) {
+//        return ResponseEntity.ok(productService.handleProduct(productDTO));
+//    }
+
     @PostMapping("/handleProduct")
     public ResponseEntity<ProductDTO> handleProduct(@RequestBody ProductDTO productDTO) {
-        return ResponseEntity.ok(productService.handleProduct(productDTO));
+        return ResponseEntity.ok(productService.createProduct(productDTO));
     }
 
     @GetMapping
