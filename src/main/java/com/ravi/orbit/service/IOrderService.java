@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface IOrderService {
 
-    OrderDTO createOrder(OrderDTO request, User customer);
+    OrderDTO createOrder(OrderDTO request);
 
     OrderDTO getOrderById(UUID id);
 
@@ -17,6 +17,6 @@ public interface IOrderService {
 
     Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable);
 
-    Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
+//    Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
 
 }

@@ -1,7 +1,9 @@
 package com.ravi.orbit.service;
 
 import com.ravi.orbit.dto.ProductDTO;
+import com.ravi.orbit.dto.ProductVariantDTO;
 import com.ravi.orbit.entity.Product;
+import com.ravi.orbit.entity.ProductVariant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,7 +11,9 @@ import java.util.UUID;
 
 public interface IProductService {
 
-    ProductDTO handleProduct(ProductDTO productDTO);
+//    ProductDTO handleProduct(ProductDTO productDTO);
+
+    ProductDTO createProduct(ProductDTO request);
 
     Page<ProductDTO> getAllProducts(Pageable pageable);
 
@@ -28,5 +32,9 @@ public interface IProductService {
     void deleteProductHard(UUID id);
 
     Product getProductById(UUID id);
+
+    ProductVariant getProductVariantById(UUID variantId);
+
+    ProductVariantDTO getProductVariantDTOById(UUID variantId);
 
 }
