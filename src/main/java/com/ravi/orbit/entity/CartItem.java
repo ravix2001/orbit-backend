@@ -16,13 +16,14 @@ public class CartItem extends UIDBase {
     @Column(name = "quantity")
     private int quantity = 1;
 
-    @Column(name = "size")
-    private String size;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id", referencedColumnName = "id")
+    private Cart cart;
 
-    @Column(name = "color")
-    private String color;
+    @Column(name = "cart_id", insertable = false, updatable = false)
+    private UUID cartId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
@@ -30,10 +31,10 @@ public class CartItem extends UIDBase {
     private UUID productId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id", referencedColumnName = "id")
-    private Cart cart;
+    @JoinColumn(name = "variant_id")
+    private ProductVariant variant;
 
-    @Column(name = "cart_id", insertable = false, updatable = false)
-    private UUID cartId;
+    @Column(name = "variant_id", insertable = false, updatable = false)
+    private UUID variantId;
 
 }

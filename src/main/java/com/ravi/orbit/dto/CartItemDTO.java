@@ -1,9 +1,9 @@
 package com.ravi.orbit.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ravi.orbit.entity.Product;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -13,12 +13,22 @@ public class CartItemDTO {
 
     private UUID id;
 
-    private int quantity = 1;
+    private UUID productId;
 
-    private String size;
+    private UUID variantId;
+
+    private String productName;
+
+    private String imageUrl;
 
     private String color;
 
-    private Product product;
+    private String size;
+
+    private Integer quantity;
+
+    private BigDecimal unitPrice;
+
+    private BigDecimal totalPrice;
 
 }
