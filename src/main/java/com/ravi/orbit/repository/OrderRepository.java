@@ -16,35 +16,31 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
 
     @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
             " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, " +
-            " o.customerId, o.customerName, o.customerPhone, o.customerImage," +
-            " o.sellerId, o.sellerName, o.sellerPhone, o.sellerImage, o.productId ) " +
+            " o.customerId, o.customerName, o.customerPhone, o.customerImage) " +
             " FROM Order o " +
             " WHERE o.id = :id ")
     Optional<OrderDTO> getOrderById(UUID id);
 
     @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
             " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, " +
-            " o.customerId, o.customerName, o.customerPhone, o.customerImage," +
-            " o.sellerId, o.sellerName, o.sellerPhone, o.sellerImage, o.productId ) " +
+            " o.customerId, o.customerName, o.customerPhone, o.customerImage) " +
             " FROM Order o " +
             " WHERE o.orderNumber = :orderNumber ")
     Optional<OrderDTO> getOrderByOrderNumber(Long orderNumber);
 
     @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
             " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, " +
-            " o.customerId, o.customerName, o.customerPhone, o.customerImage," +
-            " o.sellerId, o.sellerName, o.sellerPhone, o.sellerImage, o.productId ) " +
+            " o.customerId, o.customerName, o.customerPhone, o.customerImage) " +
             " FROM Order o " +
             " WHERE o.customerId = :customerId ")
     Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable);
 
-    @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
-            " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, " +
-            " o.customerId, o.customerName, o.customerPhone, o.customerImage," +
-            " o.sellerId, o.sellerName, o.sellerPhone, o.sellerImage, o.productId ) " +
-            " FROM Order o " +
-            " WHERE o.sellerId = :sellerId ")
-    Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
+//    @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
+//            " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, " +
+//            " o.customerId, o.customerName, o.customerPhone, o.customerImage) " +
+//            " FROM Order o " +
+//            " WHERE o.sellerId = :sellerId ")
+//    Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
 
     @Query("SELECT MAX(o.orderNumber) FROM Order o")
     Long findMaxOrderNumber();
