@@ -24,10 +24,10 @@ public class SellerReview extends UIDBase {
     private static final long serialVersionUID = 1L;
 
     @Column(nullable = false)
-    private String reviewText;
+    private int rating;
 
     @Column(nullable = false)
-    private int rating;
+    private String reviewText;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
