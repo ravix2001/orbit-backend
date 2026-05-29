@@ -56,7 +56,7 @@ public class OrderServiceImpl implements IOrderService {
 
         Set<UUID> variantIds = request.getVariantQuantities().keySet();
 
-        List<ProductVariant> variants = productVariantRepository.findByIdsAndProductId(variantIds, request.getProductId());
+        List<ProductVariant> variants = productVariantRepository.findByVariantIds(variantIds);
 
         /*
          * VALIDATE VARIANTS
@@ -323,7 +323,7 @@ public class OrderServiceImpl implements IOrderService {
 
         User seller = item.getSeller();
 
-        ProductVariantDTO variantDTO = productService.getProductVariantDTOById(item.getVariantId());
+        ProductVariantDTO variantDTO = productService.getProductVariantDTOById(item.getVariant().getId());
 
         OrderItemDTO dto = new OrderItemDTO();
 
