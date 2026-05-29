@@ -59,18 +59,18 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersByCustomerId(customerId, pageable));
     }
 
-//    @GetMapping(params = "sellerId")
-//    public ResponseEntity<Page<OrderDTO>> getOrdersBySeller(
-//            @RequestParam UUID sellerId,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "12") int size,
+    @GetMapping(params = "sellerId")
+    public ResponseEntity<Page<OrderDTO>> getOrdersBySeller(
+            @RequestParam UUID sellerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
 //            @RequestParam(defaultValue = "orderNumber") String sortBy,
-//            @RequestParam(defaultValue = "true") boolean ascending){
-//
+            @RequestParam(defaultValue = "true") boolean ascending){
+
 //        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//
-//        return ResponseEntity.ok(orderService.getOrdersBySellerId(sellerId, pageable));
-//    }
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(orderService.getOrdersBySellerId(sellerId, pageable));
+    }
 
 }

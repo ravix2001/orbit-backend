@@ -281,10 +281,10 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.getOrdersByCustomerId(customerId, pageable);
     }
 
-//    @Override
-//    public Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable){
-//        return orderRepository.getOrdersBySellerId(sellerId, pageable);
-//    }
+    @Override
+    public Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable){
+        return orderRepository.getOrdersBySellerId(sellerId, pageable);
+    }
 
     private OrderDTO convertToDTO(Order order) {
 

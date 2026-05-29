@@ -17,6 +17,6 @@ public interface IOrderService {
 
     Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable);
 
-//    Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
+    Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
 
 }

@@ -41,6 +41,22 @@ public class OrderDTO {
 //        this.productId = productId;
     }
 
+    public OrderDTO(UUID id, Long orderNumber, int totalItems, BigDecimal totalAmount, EOrderStatus orderStatus,
+                    LocalDateTime orderDate, LocalDateTime deliveryDate,
+                    UUID customerId, String customerName, String customerPhone, String customerImage) {
+        this.id = id;
+        this.orderNumber = orderNumber;
+        this.totalItems = totalItems;
+        this.totalAmount = totalAmount;
+        this.orderStatus = orderStatus;
+        this.orderDate = orderDate.toLocalDate();
+        this.deliveryDate = deliveryDate.toLocalDate();
+        this.customerId = customerId;
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
+        this.customerImage = customerImage;
+    }
+
     private UUID id;
 
     private Long orderNumber;
