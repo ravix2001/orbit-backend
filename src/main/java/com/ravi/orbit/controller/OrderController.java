@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +38,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable UUID id){
-        return ResponseEntity.ok(orderService.getOrderById(id));
+        return ResponseEntity.ok(orderService.getOrder(id));
     }
 
     @GetMapping(params = "orderNumber")
@@ -59,18 +60,30 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getOrdersByCustomerId(customerId, pageable));
     }
 
-//    @GetMapping(params = "sellerId")
-//    public ResponseEntity<Page<OrderDTO>> getOrdersBySeller(
-//            @RequestParam UUID sellerId,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "12") int size,
+    @GetMapping(params = "sellerId")
+    public ResponseEntity<Page<OrderDTO>> getOrdersBySeller(
+            @RequestParam UUID sellerId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
 //            @RequestParam(defaultValue = "orderNumber") String sortBy,
-//            @RequestParam(defaultValue = "true") boolean ascending){
-//
+            @RequestParam(defaultValue = "true") boolean ascending){
+
 //        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//
-//        return ResponseEntity.ok(orderService.getOrdersBySellerId(sellerId, pageable));
-//    }
+        Pageable pageable = PageRequest.of(page, size);
+
+        return ResponseEntity.ok(orderService.getOrdersBySellerId(sellerId, pageable));
+    }
+
+    @PutMapping("/confirm/{orderId}")
+    public ResponseEntity<?> confirmOrder(@PathVariable UUID orderId){
+        orderService.confirmOrder(orderId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/cancel/{orderId}")
+    public ResponseEntity<?> cancelOrder(@PathVariable UUID orderId){
+        orderService.cancelOrder(orderId);
+        return ResponseEntity.ok().build();
+    }
 
 }

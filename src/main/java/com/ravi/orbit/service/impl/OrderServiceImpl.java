@@ -8,6 +8,7 @@ import com.ravi.orbit.entity.OrderItem;
 import com.ravi.orbit.entity.Product;
 import com.ravi.orbit.entity.ProductVariant;
 import com.ravi.orbit.entity.User;
+import com.ravi.orbit.enums.EOrderStatus;
 import com.ravi.orbit.exceptions.BadRequestException;
 import com.ravi.orbit.repository.OrderItemRepository;
 import com.ravi.orbit.repository.OrderRepository;
@@ -56,7 +57,7 @@ public class OrderServiceImpl implements IOrderService {
 
         Set<UUID> variantIds = request.getVariantQuantities().keySet();
 
-        List<ProductVariant> variants = productVariantRepository.findByIdsAndProductId(variantIds, request.getProductId());
+        List<ProductVariant> variants = productVariantRepository.findByVariantIds(variantIds);
 
         /*
          * VALIDATE VARIANTS
@@ -220,6 +221,7 @@ public class OrderServiceImpl implements IOrderService {
         /*
          * SAVE ORDER
          */
+        order.setOrderStatus(EOrderStatus.PLACED);
         Order savedOrder = orderRepository.save(order);
 
         /*
@@ -239,9 +241,9 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderDTO getOrderById(UUID id) {
-        OrderDTO orderDTO = orderRepository.getOrderById(id)
-                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Order: " + id));
+    public OrderDTO getOrder(UUID id) {
+
+        OrderDTO orderDTO = getOrderDTOById(id);
 
         List<OrderItem> orderItems = orderItemRepository.findAllByOrderId((orderDTO.getId()));
 
@@ -281,10 +283,50 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.getOrdersByCustomerId(customerId, pageable);
     }
 
-//    @Override
-//    public Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable){
-//        return orderRepository.getOrdersBySellerId(sellerId, pageable);
-//    }
+    @Override
+    public Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable){
+        return orderRepository.getOrdersBySellerId(sellerId, pageable);
+    }
+
+    @Transactional
+    public void confirmOrder(UUID orderId) {
+
+        Order order = getOrderById(orderId);
+
+        if (order.getOrderStatus() != EOrderStatus.PLACED) {
+            throw new BadRequestException("Only placed orders can be confirmed");
+        }
+
+        order.setOrderStatus(EOrderStatus.CONFIRMED);
+
+        orderRepository.save(order);
+    }
+
+    @Transactional
+    public void cancelOrder(UUID orderId) {
+
+        Order order = getOrderById(orderId);
+
+        if (order.getOrderStatus() != EOrderStatus.PLACED) {
+            throw new BadRequestException("Only placed orders can be cancelled");
+        }
+
+        order.setOrderStatus(EOrderStatus.CANCELLED);
+
+        orderRepository.save(order);
+    }
+
+    @Override
+    public OrderDTO getOrderDTOById(UUID id){
+        return orderRepository.getOrderById(id)
+                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Order: " + id));
+    }
+
+    @Override
+    public Order getOrderById(UUID id){
+        return orderRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Order: " + id));
+    }
 
     private OrderDTO convertToDTO(Order order) {
 
@@ -323,7 +365,7 @@ public class OrderServiceImpl implements IOrderService {
 
         User seller = item.getSeller();
 
-        ProductVariantDTO variantDTO = productService.getProductVariantDTOById(item.getVariantId());
+        ProductVariantDTO variantDTO = productService.getProductVariantDTOById(item.getVariant().getId());
 
         OrderItemDTO dto = new OrderItemDTO();
 

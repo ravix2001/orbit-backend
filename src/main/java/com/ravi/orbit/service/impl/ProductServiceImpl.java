@@ -24,6 +24,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Transactional
@@ -201,6 +202,14 @@ public class ProductServiceImpl implements IProductService {
 
         productDTO.setVariants(variants);
 
+        int totalQuantity = variants.stream()
+                .map(ProductVariantDTO::getQuantity)
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        productDTO.setQuantity(totalQuantity);
+
         return productDTO;
     }
 
@@ -212,6 +221,14 @@ public class ProductServiceImpl implements IProductService {
         List<ProductVariantDTO> variants = getProductVariantsDTOByProductId(productDTO.getId());
 
         productDTO.setVariants(variants);
+
+        int totalQuantity = variants.stream()
+                .map(ProductVariantDTO::getQuantity)
+                .filter(Objects::nonNull)
+                .mapToInt(Integer::intValue)
+                .sum();
+
+        productDTO.setQuantity(totalQuantity);
 
         return productDTO;
     }

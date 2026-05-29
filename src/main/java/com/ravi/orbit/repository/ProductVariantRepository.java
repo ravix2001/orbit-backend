@@ -30,6 +30,7 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
 
     List<ProductVariant> findByIdAndProductId(UUID id, UUID productId);
 
-    @Query("SELECT pv FROM ProductVariant pv WHERE pv.id IN :ids AND pv.productId = :productId")
-    List<ProductVariant> findByIdsAndProductId(Set<UUID> ids, UUID productId);
+    @Query("SELECT pv FROM ProductVariant pv WHERE pv.id IN :variantIds ")
+    List<ProductVariant> findByVariantIds(Set<UUID> variantIds);
+
 }
