@@ -4,41 +4,43 @@
 # Currently not required since the deployment is from render
 # Later add card in fly.io and deploy it from there
 
-app = "orbit"
-primary_region = "bom"  # Singapore — closest to Nepal. Change if needed.
-                        # Other options: bom (Mumbai), nrt (Tokyo)
 
-[build]
-  # We deploy a pre-built Docker image from Docker Hub, so no build happens here
-  image = "ravipandit/orbit:latest"
 
-[env]
-  PORT = "8080"
-  SPRING_PROFILES_ACTIVE = "prod"
-
-[http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = true   # Saves free tier resources — stops when idle
-  auto_start_machines = true  # Wakes up on incoming request
-  min_machines_running = 0    # Set to 1 if you don't want cold starts
-
-  [http_service.concurrency]
-    type = "requests"
-    hard_limit = 100
-    soft_limit = 80
-
-[[vm]]
-  memory = "512mb"   # Free tier allows 256MB; bump to 512MB for Spring Boot
-  cpu_kind = "shared"
-  cpus = 1
-
-[checks]
-  [checks.health]
-    grace_period = "30s"
-    interval = "15s"
-    method = "GET"
-    path = "/actuator/health"
-    port = 8080
-    timeout = "10s"
-    type = "http"
+#app = "orbit"
+#primary_region = "bom"  # Singapore — closest to Nepal. Change if needed.
+#                        # Other options: bom (Mumbai), nrt (Tokyo)
+#
+#[build]
+#  # We deploy a pre-built Docker image from Docker Hub, so no build happens here
+#  image = "ravipandit/orbit:latest"
+#
+#[env]
+#  PORT = "8080"
+#  SPRING_PROFILES_ACTIVE = "prod"
+#
+#[http_service]
+#  internal_port = 8080
+#  force_https = true
+#  auto_stop_machines = true   # Saves free tier resources — stops when idle
+#  auto_start_machines = true  # Wakes up on incoming request
+#  min_machines_running = 0    # Set to 1 if you don't want cold starts
+#
+#  [http_service.concurrency]
+#    type = "requests"
+#    hard_limit = 100
+#    soft_limit = 80
+#
+#[[vm]]
+#  memory = "512mb"   # Free tier allows 256MB; bump to 512MB for Spring Boot
+#  cpu_kind = "shared"
+#  cpus = 1
+#
+#[checks]
+#  [checks.health]
+#    grace_period = "30s"
+#    interval = "15s"
+#    method = "GET"
+#    path = "/actuator/health"
+#    port = 8080
+#    timeout = "10s"
+#    type = "http"
