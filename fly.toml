@@ -1,6 +1,9 @@
 # fly.toml — Fly.io deployment config for Orbit Spring Boot app
 # Replace "orbit-app" with your actual Fly.io app name
 
+# Currently not required since the deployment is from render
+# Later add card in fly.io and deploy it from there
+
 app = "orbit"
 primary_region = "bom"  # Singapore — closest to Nepal. Change if needed.
                         # Other options: bom (Mumbai), nrt (Tokyo)
