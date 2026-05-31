@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ravi</groupId>
-	<artifactId>orbit</artifactId>
+	<artifactId>orbit-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>orbit</name>
+	<name>orbit-backend</name>
 	<description>e-commerce web app</description>
 	<url/>
 	<licenses>

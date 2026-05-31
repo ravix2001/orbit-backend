@@ -9,7 +9,7 @@ on:
       - main          # Runs tests on PRs (no deploy)
 
 env:
-  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/orbit
+  DOCKER_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/orbit-backend
 
 jobs:
   # ─────────────────────────────────────────────────────────────────────────────
