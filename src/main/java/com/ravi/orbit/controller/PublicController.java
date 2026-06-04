@@ -13,7 +13,7 @@ public class PublicController {
 
     @GetMapping("/health-check")
     public ResponseEntity<String> healthCheck() {
-        return ResponseEntity.ok("Running");
+        return ResponseEntity.ok("OK");
     }
 
 }
