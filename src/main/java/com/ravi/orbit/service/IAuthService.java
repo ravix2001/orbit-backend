@@ -21,6 +21,6 @@ public interface IAuthService {
 
     AuthDTO refreshToken(String authHeader);
 
-    Map<String, String> logout(String authHeader);
+    String logout(String authHeader);
 
 }

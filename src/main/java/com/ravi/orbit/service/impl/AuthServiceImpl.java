@@ -177,7 +177,7 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public Map<String, String> logout(String authHeader) {
+    public String logout(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             throw new InvalidTokenException("Invalid authorization header");
         }
@@ -186,7 +186,8 @@ public class AuthServiceImpl implements IAuthService {
         RefreshToken refreshToken = getRefreshTokenAndRevokedFalse(token);
         refreshToken.setRevoked(true);
         refreshTokenRepository.save(refreshToken);
-        return Map.of("message", "Logged out successfully");
+        String logoutMessage = "message: Logged out successfully";
+        return logoutMessage;
     }
 
     private String generateRefreshToken() {
