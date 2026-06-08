@@ -1,5 +1,6 @@
 package com.ravi.orbit.utils;
 
+import com.ravi.orbit.dto.AuthDTO;
 import com.ravi.orbit.exceptions.BadRequestException;
 
 public class CommonValidator {
@@ -19,6 +20,24 @@ public class CommonValidator {
         }
         if (!email.matches(MyConstants.RE_EMAIL)) {
             throw new BadRequestException(MyConstants.ERR_MSG_BAD_REQUEST + "Email");
+        }
+    }
+
+    public static void validateAuth(AuthDTO authDTO) {
+        if (CommonMethods.isEmpty(authDTO.getUsername())) {
+            throw new BadRequestException("Username cannot be empty");
+        }
+        if (CommonMethods.isEmpty(authDTO.getPassword())) {
+            throw new BadRequestException("Password cannot be empty");
+        }
+    }
+
+    public static void validateDevice(AuthDTO authDTO) {
+        if (CommonMethods.isEmpty(authDTO.getDeviceId())) {
+            throw new BadRequestException("DeviceId cannot be empty");
+        }
+        if (CommonMethods.isEmpty(authDTO.getDeviceName())) {
+            throw new BadRequestException("DeviceName cannot be empty");
         }
     }
 

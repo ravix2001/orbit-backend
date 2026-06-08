@@ -29,4 +29,13 @@ public class RefreshToken extends UIDBase {
     @Column(name = "expiryDate", nullable = false)
     private LocalDateTime expiryDate;
 
+    @Column(name = "revoked")
+    private boolean revoked = false;
+
+    @Column(name = "device_id", nullable = false)
+    private String deviceId;
+
+    @Column(name = "device_name", nullable = false)
+    private String deviceName;
+
 }
