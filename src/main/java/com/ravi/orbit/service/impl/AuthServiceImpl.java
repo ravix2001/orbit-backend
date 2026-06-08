@@ -186,8 +186,8 @@ public class AuthServiceImpl implements IAuthService {
         RefreshToken refreshToken = getRefreshTokenAndRevokedFalse(token);
         refreshToken.setRevoked(true);
         refreshTokenRepository.save(refreshToken);
-        String logoutMessage = "message: Logged out successfully";
-        return logoutMessage;
+
+        return "message: Logged out successfully";
     }
 
     private String generateRefreshToken() {
