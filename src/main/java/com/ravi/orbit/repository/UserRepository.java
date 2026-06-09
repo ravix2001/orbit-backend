@@ -40,10 +40,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
             " WHERE u.username = :username ")
     Optional<UserDTO> getUserDTOByUsername(String username);
 
-    @Query("SELECT NEW com.ravi.orbit.dto.UserDTO(u.username, u.password) " +
-            " FROM User u " +
-            " WHERE u.username = :username ")
-    Optional<UserDTO> getAuthByUsername(String username);
+//    @Query("SELECT NEW com.ravi.orbit.dto.UserDTO(u.username, u.password) " +
+//            " FROM User u " +
+//            " WHERE u.username = :username ")
+//    Optional<UserDTO> getAuthByUsername(String username);
 
     Optional<User> findByUsername(String username);
 

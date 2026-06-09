@@ -22,7 +22,7 @@ public interface IUserService {
 
     User getUserPrincipal();
 
-    UserDTO getUserAuthByUsername(String username);
+//    UserDTO getUserAuthByUsername(String username);
 
     Page<UserDTO> getUsersByRoleAndStatus(ERole role, EStatus status, Pageable pageable);
 

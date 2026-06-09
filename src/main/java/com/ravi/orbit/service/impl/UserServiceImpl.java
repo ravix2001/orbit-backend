@@ -80,12 +80,12 @@ public class UserServiceImpl implements IUserService {
         return getUserByUsername(username);
     }
 
-    @Override
-    public UserDTO getUserAuthByUsername(String username) {
-        return userRepository.getAuthByUsername(username)
-                .orElseThrow(() -> new BadRequestException(MyConstants
-                        .ERR_MSG_NOT_FOUND + "User: " + username));
-    }
+//    @Override
+//    public UserDTO getUserAuthByUsername(String username) {
+//        return userRepository.getAuthByUsername(username)
+//                .orElseThrow(() -> new BadRequestException(MyConstants
+//                        .ERR_MSG_NOT_FOUND + "User: " + username));
+//    }
 
     @Override
     public Page<UserDTO> getUsersByRoleAndStatus(ERole role, EStatus status, Pageable pageable) {
