@@ -15,9 +15,11 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
 
-    public UserDTO(String username, String password) {
+    public UserDTO(String username, String password, String deviceId, String deviceName) {
         this.username = username;
         this.password = password;
+        this.deviceId = deviceId;
+        this.deviceName = deviceName;
     }
 
     public UserDTO(UUID id, String firstName, String middleName, String lastName, String phone, String email,
@@ -89,5 +91,9 @@ public class UserDTO {
     private String state;
 
     private String countryCode;
+
+    // extra for auth
+    private String deviceId;
+    private String deviceName;
 
 }

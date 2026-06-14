@@ -14,6 +14,10 @@ public class AuthDTO {
 
     private String password;
 
+    private String deviceId;
+
+    private String deviceName;
+
     // for login and signup response
     private UserDTO userDTO;
 

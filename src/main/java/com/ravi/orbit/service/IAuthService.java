@@ -19,8 +19,8 @@ public interface IAuthService {
 
     AuthDTO adminLogin(AuthDTO authDTO);
 
-    Map<String, String> refreshToken(String authHeader);
+    AuthDTO refreshToken(String authHeader);
 
-    Map<String, String> logout(String authHeader);
+    String logout(String authHeader);
 
 }

@@ -14,10 +14,6 @@ public interface IUserService {
 
     UserDTO handleUser(UserDTO userDTO);
 
-    AuthDTO signup(UserDTO userDTO, ERole role);
-
-    AuthDTO login(String username, String password, ERole role);
-
     UserDTO updateProfile(UserDTO userDTO, String username);
 
     UserDTO getUserDTOById(UUID id);
@@ -26,7 +22,7 @@ public interface IUserService {
 
     User getUserPrincipal();
 
-    UserDTO getUserAuthByUsername(String username);
+//    UserDTO getUserAuthByUsername(String username);
 
     Page<UserDTO> getUsersByRoleAndStatus(ERole role, EStatus status, Pageable pageable);
 
@@ -39,5 +35,7 @@ public interface IUserService {
     User getUserByUsername(String username);
 
     User getUserByEmail(String email);
+
+    User mapToUserEntity (User user, UserDTO userDTO);
 
 }

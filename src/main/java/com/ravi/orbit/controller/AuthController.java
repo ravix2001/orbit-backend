@@ -50,13 +50,13 @@ public class AuthController {
     /* ===================== TOKEN ===================== */
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<Map<String, String>> refreshToken(
+    public ResponseEntity<AuthDTO> refreshToken(
             @RequestHeader("Authorization") String authHeader) {
         return ResponseEntity.ok(authService.refreshToken(authHeader));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(
+    public ResponseEntity<String> logout(
             @RequestHeader("Authorization") String authHeader) {
         return ResponseEntity.ok(authService.logout(authHeader));
     }

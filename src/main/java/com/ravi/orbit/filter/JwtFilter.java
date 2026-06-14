@@ -40,6 +40,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(7);
 
+        if (!token.contains(".")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         try {
             // Validate token (throws if expired/invalid)
             jwtUtil.validateToken(token);
