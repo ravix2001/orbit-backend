@@ -131,7 +131,7 @@ public class UserServiceImpl implements IUserService {
         user.setFirstName(userDTO.getFirstName());
         user.setMiddleName(userDTO.getMiddleName());
         user.setLastName(userDTO.getLastName());
-        user.setUsername(userDTO.getPhone());
+        user.setUsername(userDTO.getEmail());
         user.setPhone(userDTO.getPhone());
         user.setEmail(userDTO.getEmail());
         user.setGender(userDTO.getGender());
