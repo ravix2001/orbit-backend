@@ -62,7 +62,7 @@ public class AdminServiceImpl implements IAdminService {
 
 
     @Override
-    public String deleteAdmin(UUID id) {
+    public String removeAdmin(UUID id) {
         User user = userService.getUserById(id);
 
         // Fetch the user's current role

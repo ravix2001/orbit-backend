@@ -24,7 +24,7 @@ public class ProductController {
 //        return ResponseEntity.ok(productService.handleProduct(productDTO));
 //    }
 
-    @PostMapping("/handleProduct")
+    @PostMapping("/handle-product")
     public ResponseEntity<ProductDTO> handleProduct(@RequestBody ProductDTO productDTO) {
         return ResponseEntity.ok(productService.createProduct(productDTO));
     }
@@ -90,13 +90,13 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductDTOsBySellerId(pageable, sellerId));
     }
 
-    @DeleteMapping("/deleteProduct/{id}")
+    @DeleteMapping("/delete-product/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/deleteProductHard/{id}")
+    @DeleteMapping("/delete-product-hard/{id}")
     public ResponseEntity<Void> deleteProductHard(@PathVariable UUID id) {
         productService.deleteProductHard(id);
         return ResponseEntity.ok().build();

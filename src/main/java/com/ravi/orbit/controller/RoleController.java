@@ -25,7 +25,7 @@ public class RoleController {
 
     private final IRoleService roleService;
 
-    @PostMapping("/handleRole")
+    @PostMapping("/handle-role")
     public ResponseEntity<RoleDTO> handleRole(@RequestBody RoleDTO roleDTO){
         return ResponseEntity.ok(roleService.handleRole(roleDTO));
     }

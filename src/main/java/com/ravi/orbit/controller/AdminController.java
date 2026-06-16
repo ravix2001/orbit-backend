@@ -17,22 +17,22 @@ public class AdminController {
     private final IAdminService adminService;
     private final IUserService userService;
 
-    @PostMapping("/handleUser")
+    @PostMapping("/handle-user")
     public ResponseEntity<UserDTO> handleUser(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userService.handleUser(userDTO));
     }
 
-    @GetMapping("/createAdmin/{id}")
+    @GetMapping("/create-admin/{id}")
     public ResponseEntity<String> createAdmin(@PathVariable UUID id) {
         return ResponseEntity.ok(adminService.createAdmin(id));
     }
 
-    @GetMapping("/deleteAdmin/{id}")
+    @GetMapping("/remove-admin/{id}")
     public ResponseEntity<String> deleteAdmin(@PathVariable UUID id) {
-        return ResponseEntity.ok(adminService.deleteAdmin(id));
+        return ResponseEntity.ok(adminService.removeAdmin(id));
     }
 
-    @DeleteMapping("/deleteUserHard/{id}")
+    @DeleteMapping("/delete-user-hard/{id}")
     public ResponseEntity<Void> deleteUserHard(@PathVariable UUID id) {
         userService.deleteUserHard(id);
         return ResponseEntity.ok().build();
