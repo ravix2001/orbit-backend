@@ -81,21 +81,14 @@ public class CartServiceImpl implements ICartService {
          */
         if (existingCartItemOptional.isPresent()) {
 
-            CartItem existingCartItem =
-                    existingCartItemOptional.get();
+            CartItem existingCartItem = existingCartItemOptional.get();
 
-            int newQuantity =
-                    existingCartItem.getQuantity()
-                            + request.getQuantity();
-
-            /*
-             * STOCK VALIDATION
-             */
-            if (newQuantity > variant.getQuantity()) {
+            // STOCK VALIDATION
+            if (request.getQuantity() > variant.getQuantity()) {
                 throw new BadRequestException("Cannot add more items than available stock.");
             }
 
-            existingCartItem.setQuantity(newQuantity);
+            existingCartItem.setQuantity(request.getQuantity()); // SET instead of +=
 
             cartItemRepository.save(existingCartItem);
         }

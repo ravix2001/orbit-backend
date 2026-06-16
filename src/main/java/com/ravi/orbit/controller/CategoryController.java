@@ -21,7 +21,7 @@ public class CategoryController {
     private final ICategoryService categoryService;
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/handleCategory")
+    @PostMapping("/handle-category")
     public ResponseEntity<CategoryDTO> handleCategory(@RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.ok(categoryService.handleCategory(categoryDTO));
     }
@@ -44,14 +44,14 @@ public class CategoryController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/deleteCategory/{id}")
+    @DeleteMapping("/delete-category/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable UUID id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/deleteCategoryHard/{id}")
+    @DeleteMapping("/delete-category-hard/{id}")
     public ResponseEntity<?> deleteCategoryHard(@PathVariable UUID id) {
         categoryService.deleteCategoryHard(id);
         return ResponseEntity.ok().build();

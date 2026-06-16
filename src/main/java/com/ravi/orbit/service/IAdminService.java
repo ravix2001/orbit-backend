@@ -6,6 +6,6 @@ public interface IAdminService {
 
     String createAdmin(UUID id);
 
-    String deleteAdmin(UUID id);
+    String removeAdmin(UUID id);
 
 }

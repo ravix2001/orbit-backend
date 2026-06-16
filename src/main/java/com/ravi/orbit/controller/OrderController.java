@@ -31,7 +31,7 @@ public class OrderController {
 
     private final IUserService userService;
 
-    @PostMapping("/createOrder")
+    @PostMapping("/create-order")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){
         return ResponseEntity.ok(orderService.createOrder(orderDTO));
     }
