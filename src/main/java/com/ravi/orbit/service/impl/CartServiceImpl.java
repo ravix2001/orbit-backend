@@ -200,29 +200,45 @@ public class CartServiceImpl implements ICartService {
         return response;
     }
 
+//    @Override
+//    public void removeItemsFromCart(UUID productId) {
+//
+//        User customer = userService.getUserPrincipal();
+//
+//        Cart cart = getCartByCustomerId(customer.getId());
+//
+//        List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
+//
+//        /*
+//         * REMOVE ALL ITEMS OF THIS PRODUCT
+//         */
+//        List<CartItem> itemsToRemove = cartItems
+//                .stream()
+//                .filter(item ->
+//                        item.getProduct() != null &&
+//                                item.getProduct().getId().equals(productId)
+//                )
+//                .toList();
+//
+//        cartItems.removeAll(itemsToRemove);
+//
+//        cartItemRepository.deleteAll(itemsToRemove);
+//    }
+
     @Override
-    public void removeItemsFromCart(UUID productId) {
+    public void removeItemsFromCart(UUID cartItemId) {
 
         User customer = userService.getUserPrincipal();
 
         Cart cart = getCartByCustomerId(customer.getId());
 
-        List<CartItem> cartItems = cartItemRepository.findAllByCartId(cart.getId());
+        CartItem cartItem = getCartItemById(cartItemId);
 
-        /*
-         * REMOVE ALL ITEMS OF THIS PRODUCT
-         */
-        List<CartItem> itemsToRemove = cartItems
-                .stream()
-                .filter(item ->
-                        item.getProduct() != null &&
-                                item.getProduct().getId().equals(productId)
-                )
-                .toList();
+        if (!cartItem.getCartId().equals(cart.getId())) {
+            throw new BadRequestException("Cart item does not belong to your cart.");
+        }
 
-        cartItems.removeAll(itemsToRemove);
-
-        cartItemRepository.deleteAll(itemsToRemove);
+        cartItemRepository.delete(cartItem);
     }
 
     @Override
@@ -242,6 +258,12 @@ public class CartServiceImpl implements ICartService {
         return cartRepository.findByCustomerId(customerId)
                 .orElseThrow(() -> new BadRequestException(MyConstants
                         .ERR_MSG_NOT_FOUND + "Cart for customer with id: " + customerId));
+    }
+
+    private CartItem getCartItemById(UUID cartItemId){
+        return cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new BadRequestException(MyConstants
+                        .ERR_MSG_NOT_FOUND + "Cart Item with id: " + cartItemId));
     }
 
 }

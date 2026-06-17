@@ -37,8 +37,8 @@ public class CartController {
     }
 
     @DeleteMapping("/remove-from-cart")
-    public ResponseEntity<?> removeFromCart(@RequestParam UUID productId){
-        cartService.removeItemsFromCart(productId);
+    public ResponseEntity<?> removeFromCart(@RequestParam UUID cartItemId){
+        cartService.removeItemsFromCart(cartItemId);
         return ResponseEntity.ok().build();
     }
 
