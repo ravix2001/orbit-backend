@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -19,6 +20,13 @@ import java.util.UUID;
 public class CategoryController {
 
     private final ICategoryService categoryService;
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/bulk-add")
+    public ResponseEntity<Void> addCategories(@RequestBody List<CategoryDTO> categoryDTOList) {
+        categoryService.handleCategories(categoryDTOList);
+        return ResponseEntity.ok().build();
+    }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/handle-category")
