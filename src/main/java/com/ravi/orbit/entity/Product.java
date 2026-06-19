@@ -38,6 +38,9 @@ public class Product extends UIDBase{
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "quantity")
+    private Integer quantity;
+
     @Column(name = "market_price", precision = 10, scale = 2)
     private BigDecimal marketPrice = BigDecimal.ZERO;
 

@@ -12,6 +12,7 @@ import com.ravi.orbit.enums.EOrderStatus;
 import com.ravi.orbit.exceptions.BadRequestException;
 import com.ravi.orbit.repository.OrderItemRepository;
 import com.ravi.orbit.repository.OrderRepository;
+import com.ravi.orbit.repository.ProductRepository;
 import com.ravi.orbit.repository.ProductVariantRepository;
 import com.ravi.orbit.service.IOrderService;
 import com.ravi.orbit.service.IProductService;
@@ -44,6 +45,7 @@ public class OrderServiceImpl implements IOrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final ProductVariantRepository productVariantRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public OrderDTO createOrder(OrderDTO request) {
@@ -187,11 +189,15 @@ public class OrderServiceImpl implements IOrderService {
              */
             variant.setQuantity(variant.getQuantity() - quantity);
 
+            product.setQuantity(product.getQuantity() - quantity);
+
             if (variant.getQuantity() <= 0) {
                 variant.setIsAvailable(false);
             }
 
             productVariantRepository.save(variant);
+
+            productRepository.save(product);
 
             /*
              * ORDER TOTALS
@@ -302,7 +308,8 @@ public class OrderServiceImpl implements IOrderService {
         orderRepository.save(order);
     }
 
-    @Transactional
+    // todo: cancelling the order updates the quantity in the stock
+    @Override
     public void cancelOrder(UUID orderId) {
 
         Order order = getOrderById(orderId);

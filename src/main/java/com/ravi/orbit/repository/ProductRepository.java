@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface ProductRepository extends JpaRepository<Product, UUID> {
 
-    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, " +
+    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, p.quantity, " +
             " p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
             " p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
@@ -20,31 +20,31 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             " WHERE p.status = com.ravi.orbit.enums.EStatus.ACTIVE ")
     Page<ProductDTO> getAllProducts(Pageable pageable);
 
-    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.code, p.name, p.brand, p.status, p.description, " +
-            " p.features, p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
+    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.code, p.name, p.brand, p.features, p.description, p.quantity, " +
+            " p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
             " p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
             " WHERE p.id = :id")
     Optional<ProductDTO> getProductDTOById(UUID id);
 
-    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.code, p.name, p.brand, p.status, p.description, " +
-            " p.features, p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
+    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.code, p.name, p.brand, p.features, p.description, p.quantity, " +
+            " p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
             " p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
             " WHERE p.code = :code ")
     Optional<ProductDTO> getProductDTOByCode(String code);
 
-    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.code, p.name, p.brand, p.status, p.description, " +
-            " p.features, p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
+    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.code, p.name, p.brand, p.features, p.description, p.quantity, " +
+            " p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
             " p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id " +
             " WHERE p.name = :name AND p.status = com.ravi.orbit.enums.EStatus.ACTIVE ")
     Page<ProductDTO> getProductDTOsByName(Pageable pageable, String name);
 
-    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, " +
+    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, p.quantity, " +
             " p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
             " p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +
@@ -52,7 +52,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
             " WHERE p.categoryId = :categoryId AND p.status = com.ravi.orbit.enums.EStatus.ACTIVE ")
     Page<ProductDTO> getProductDTOsByCategoryId(Pageable pageable, UUID categoryId);
 
-    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, " +
+    @Query(" SELECT NEW com.ravi.orbit.dto.ProductDTO(p.id, p.name, p.brand, p.description, p.quantity, " +
             " p.marketPrice, p.discountPercent, p.discountAmount, p.sellingPrice," +
             " p.categoryId, c.name, p.sellerId, p.imageUrl ) " +
             " FROM Product p" +

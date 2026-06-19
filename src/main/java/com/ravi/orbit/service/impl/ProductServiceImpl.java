@@ -115,6 +115,19 @@ public class ProductServiceImpl implements IProductService {
 
         product.setDiscountAmount(discountAmount);
 
+        Integer totalQuantity = 0;
+
+        if (request.getVariants() != null && !request.getVariants().isEmpty()) {
+            totalQuantity = request.getVariants()
+                    .stream()
+                    .mapToInt(ProductVariantDTO::getQuantity)
+                    .sum();
+        } else {
+            totalQuantity = request.getQuantity();
+        }
+
+        product.setQuantity(totalQuantity);
+
         /*
          * SAVE PRODUCT FIRST
          */
@@ -192,6 +205,7 @@ public class ProductServiceImpl implements IProductService {
         request.setCode(savedProduct.getCode());
         request.setSellingPrice(savedProduct.getSellingPrice());
         request.setStatus(savedProduct.getStatus());
+        request.setQuantity(savedProduct.getQuantity());
 
         return request;
     }
