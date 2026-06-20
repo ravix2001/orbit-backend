@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,6 +22,30 @@ import java.util.UUID;
 public class CategoryServiceImpl implements ICategoryService {
 
     private final CategoryRepository categoryRepository;
+
+    @Override
+    public void handleCategories(List<CategoryDTO> categoryDTOList) {
+
+        List<Category> categories = new ArrayList<>();
+
+        for (CategoryDTO dto : categoryDTOList) {
+
+            Category category;
+
+            if (CommonMethods.isEmpty(dto.getId())) {
+                category = new Category();
+            } else {
+                category = getCategoryById(dto.getId());
+            }
+
+            category.setName(dto.getName());
+            category.setImageUrl(dto.getImageUrl());
+
+            categories.add(category);
+        }
+
+        categoryRepository.saveAll(categories);
+    }
 
     @Override
     public CategoryDTO handleCategory(CategoryDTO categoryDTO) {

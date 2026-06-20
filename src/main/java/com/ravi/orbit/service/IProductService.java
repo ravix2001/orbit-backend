@@ -7,11 +7,14 @@ import com.ravi.orbit.entity.ProductVariant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface IProductService {
 
 //    ProductDTO handleProduct(ProductDTO productDTO);
+
+    void createProducts(List<ProductDTO> requests);
 
     ProductDTO createProduct(ProductDTO request);
 

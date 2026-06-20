@@ -39,6 +39,14 @@ public class ProductServiceImpl implements IProductService {
     private final ProductVariantRepository productVariantRepository;
 
     @Override
+    public void createProducts(List<ProductDTO> requests) {
+
+        for (ProductDTO request : requests) {
+            createProduct(request);
+        }
+    }
+
+    @Override
     public ProductDTO createProduct(ProductDTO request) {
 
         User seller = userService.getUserPrincipal();
@@ -106,6 +114,19 @@ public class ProductServiceImpl implements IProductService {
         product.setDiscountPercent(discountPercent);
 
         product.setDiscountAmount(discountAmount);
+
+        Integer totalQuantity = 0;
+
+        if (request.getVariants() != null && !request.getVariants().isEmpty()) {
+            totalQuantity = request.getVariants()
+                    .stream()
+                    .mapToInt(ProductVariantDTO::getQuantity)
+                    .sum();
+        } else {
+            totalQuantity = request.getQuantity();
+        }
+
+        product.setQuantity(totalQuantity);
 
         /*
          * SAVE PRODUCT FIRST
@@ -184,6 +205,7 @@ public class ProductServiceImpl implements IProductService {
         request.setCode(savedProduct.getCode());
         request.setSellingPrice(savedProduct.getSellingPrice());
         request.setStatus(savedProduct.getStatus());
+        request.setQuantity(savedProduct.getQuantity());
 
         return request;
     }
@@ -194,7 +216,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDTO getProduct(UUID productId){
+    public ProductDTO getProduct(UUID productId) {
 
         ProductDTO productDTO = getProductDTOById(productId);
 
@@ -214,7 +236,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public ProductDTO getProductByCode(String code){
+    public ProductDTO getProductByCode(String code) {
 
         ProductDTO productDTO = getProductDTOByCode(code);
 
@@ -240,7 +262,7 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
-    public Page<ProductDTO> getProductDTOsByCategoryId(Pageable pageable, UUID categoryId){
+    public Page<ProductDTO> getProductDTOsByCategoryId(Pageable pageable, UUID categoryId) {
         return productRepository.getProductDTOsByCategoryId(pageable, categoryId);
     }
 
@@ -281,7 +303,7 @@ public class ProductServiceImpl implements IProductService {
                         .ERR_MSG_NOT_FOUND + "Product: " + id));
     }
 
-    public List<ProductVariantDTO> getProductVariantsDTOByProductId(UUID productId){
+    public List<ProductVariantDTO> getProductVariantsDTOByProductId(UUID productId) {
         return productVariantRepository.getProductVariantsByProductId(productId);
     }
 

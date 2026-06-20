@@ -14,16 +14,16 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductDTO {
 
-    public ProductDTO(UUID id, String code, String name, String brand, EStatus status, String features, String description,
+    public ProductDTO(UUID id, String code, String name, String brand, String features, String description, Integer quantity,
                       BigDecimal marketPrice, BigDecimal discountPercent, BigDecimal discountAmount,
                       BigDecimal sellingPrice, UUID categoryId, String categoryName, UUID sellerId, String imageUrl) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.brand = brand;
-        this.status = status;
         this.features = features;
         this.description = description;
+        this.quantity = quantity;
         this.marketPrice = marketPrice;
         this.discountPercent = discountPercent;
         this.discountAmount = discountAmount;
@@ -34,13 +34,14 @@ public class ProductDTO {
         this.imageUrl = imageUrl;
     }
 
-    public ProductDTO(UUID id, String name, String brand, String description,
+    public ProductDTO(UUID id, String name, String brand, String description, Integer quantity,
                       BigDecimal marketPrice, BigDecimal discountPercent, BigDecimal discountAmount,
                       BigDecimal sellingPrice, UUID categoryId, String categoryName, UUID sellerId, String imageUrl) {
         this.id = id;
         this.name = name;
         this.brand = brand;
         this.description = description;
+        this.quantity = quantity;
         this.marketPrice = marketPrice;
         this.discountPercent = discountPercent;
         this.discountAmount = discountAmount;

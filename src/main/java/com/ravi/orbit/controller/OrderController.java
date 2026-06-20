@@ -1,10 +1,7 @@
 package com.ravi.orbit.controller;
 
 import com.ravi.orbit.dto.OrderDTO;
-import com.ravi.orbit.entity.User;
 import com.ravi.orbit.service.IOrderService;
-import com.ravi.orbit.service.IUserService;
-import com.ravi.orbit.utils.CommonMethods;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,8 +25,6 @@ import java.util.UUID;
 public class OrderController {
 
     private final IOrderService orderService;
-
-    private final IUserService userService;
 
     @PostMapping("/create-order")
     public ResponseEntity<OrderDTO> createOrder(@RequestBody OrderDTO orderDTO){

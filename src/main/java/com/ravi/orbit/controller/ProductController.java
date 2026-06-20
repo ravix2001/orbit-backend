@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,6 +24,12 @@ public class ProductController {
 //    public ResponseEntity<ProductDTO> handleProduct(@RequestBody ProductDTO productDTO) {
 //        return ResponseEntity.ok(productService.handleProduct(productDTO));
 //    }
+
+    @PostMapping("/bulk-add")
+    public ResponseEntity<List<ProductDTO>> createBulkProducts(@RequestBody List<ProductDTO> request) {
+        productService.createProducts(request);
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping("/handle-product")
     public ResponseEntity<ProductDTO> handleProduct(@RequestBody ProductDTO productDTO) {
