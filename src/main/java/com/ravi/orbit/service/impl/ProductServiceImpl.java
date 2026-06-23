@@ -13,6 +13,7 @@ import com.ravi.orbit.repository.ProductVariantRepository;
 import com.ravi.orbit.service.ICategoryService;
 import com.ravi.orbit.service.IProductService;
 import com.ravi.orbit.service.IUserService;
+import com.ravi.orbit.utils.CommonMethods;
 import com.ravi.orbit.utils.MyConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -70,7 +71,11 @@ public class ProductServiceImpl implements IProductService {
 
         product.setCategory(category);
 
-        product.setCode(request.getCode() != null ? request.getCode() : generateProductCode());
+        if (!CommonMethods.isEmpty(request.getCode())) {
+            product.setCode(request.getCode());
+        } else {
+            product.setCode(generateProductCode());
+        }
 
         product.setName(request.getName());
 
@@ -125,7 +130,7 @@ public class ProductServiceImpl implements IProductService {
 
         Integer totalQuantity = 0;
 
-        if (request.getVariants() != null && !request.getVariants().isEmpty()) {
+        if (!CommonMethods.isEmpty(request.getVariants())) {
             totalQuantity = request.getVariants()
                     .stream()
                     .mapToInt(ProductVariantDTO::getQuantity)
@@ -150,7 +155,7 @@ public class ProductServiceImpl implements IProductService {
          * CASE 1:
          * PRODUCT HAS VARIANTS
          */
-        if (request.getVariants() != null && !request.getVariants().isEmpty()) {
+        if (!CommonMethods.isEmpty(request.getVariants())) {
 
             for (ProductVariantDTO variantDTO : request.getVariants()) {
 
@@ -234,6 +239,7 @@ public class ProductServiceImpl implements IProductService {
          */
         product.setCategory(category);
         product.setName(request.getName());
+        product.setCode(request.getCode());
         product.setBrand(request.getBrand());
         product.setFeatures(request.getFeatures());
         product.setDescription(request.getDescription());
@@ -292,7 +298,7 @@ public class ProductServiceImpl implements IProductService {
             /*
              * UPDATE EXISTING VARIANT
              */
-            if (variantDTO.getId() != null) {
+            if (!CommonMethods.isEmpty(variantDTO.getId())) {
 
                 variant = existingVariantMap.get(variantDTO.getId());
 
@@ -337,7 +343,7 @@ public class ProductServiceImpl implements IProductService {
                         .filter(v -> !requestVariantIds.contains(v.getId()))
                         .toList();
 
-        if (!variantsToDelete.isEmpty()) {
+        if (!CommonMethods.isEmpty(variantsToDelete)) {
             productVariantRepository.deleteAll(variantsToDelete);
         }
 
@@ -350,6 +356,7 @@ public class ProductServiceImpl implements IProductService {
 
         Product updatedProduct = productRepository.save(product);
 
+        request.setCode(updatedProduct.getCode());
         request.setSellingPrice(updatedProduct.getSellingPrice());
         request.setQuantity(updatedProduct.getQuantity());
 

@@ -1,5 +1,6 @@
 package com.ravi.orbit.utils;
 
+import java.util.List;
 import java.util.UUID;
 
 public class CommonMethods {
@@ -28,6 +29,14 @@ public class CommonMethods {
     public static boolean isEmpty(Long l) {
         boolean isEmpty = false;
         if (l == null || l <= 0) {
+            isEmpty = true;
+        }
+        return isEmpty;
+    }
+
+    public static boolean isEmpty(List<?> list) {
+        boolean isEmpty = false;
+        if (list == null || list.isEmpty()) {
             isEmpty = true;
         }
         return isEmpty;
