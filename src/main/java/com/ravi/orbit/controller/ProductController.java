@@ -20,20 +20,20 @@ public class ProductController {
 
     private final IProductService productService;
 
-//    @PostMapping("/handleProduct")
-//    public ResponseEntity<ProductDTO> handleProduct(@RequestBody ProductDTO productDTO) {
-//        return ResponseEntity.ok(productService.handleProduct(productDTO));
-//    }
-
     @PostMapping("/bulk-add")
     public ResponseEntity<List<ProductDTO>> createBulkProducts(@RequestBody List<ProductDTO> request) {
         productService.createProducts(request);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/handle-product")
-    public ResponseEntity<ProductDTO> handleProduct(@RequestBody ProductDTO productDTO) {
+    @PostMapping("/create-product")
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
         return ResponseEntity.ok(productService.createProduct(productDTO));
+    }
+
+    @PutMapping("/update-product")
+    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO) {
+        return ResponseEntity.ok(productService.updateProduct(productDTO));
     }
 
     @GetMapping

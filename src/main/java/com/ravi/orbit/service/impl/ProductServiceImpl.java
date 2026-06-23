@@ -15,6 +15,9 @@ import com.ravi.orbit.service.IProductService;
 import com.ravi.orbit.service.IUserService;
 import com.ravi.orbit.utils.MyConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,9 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -211,11 +219,154 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "products", key = "#request.id"),
+//            @CacheEvict(value = "product-pages", allEntries = true)
+    })
+    public ProductDTO updateProduct(ProductDTO request) {
+
+        Product product = getProductById(request.getId());
+
+        Category category = categoryService.getCategoryById(request.getCategoryId());
+
+        /*
+         * UPDATE PRODUCT
+         */
+        product.setCategory(category);
+        product.setName(request.getName());
+        product.setBrand(request.getBrand());
+        product.setFeatures(request.getFeatures());
+        product.setDescription(request.getDescription());
+        product.setImageUrl(request.getImageUrl());
+
+        BigDecimal marketPrice = request.getMarketPrice();
+        BigDecimal sellingPrice = request.getSellingPrice();
+
+        BigDecimal discountPercent = request.getDiscountPercent();
+        BigDecimal discountAmount = request.getDiscountAmount();
+
+        if (discountPercent != null
+                && discountPercent.compareTo(BigDecimal.ZERO) > 0) {
+
+            discountAmount = marketPrice
+                    .multiply(discountPercent)
+                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+
+            sellingPrice = marketPrice.subtract(discountAmount);
+
+        } else if (discountAmount != null
+                && discountAmount.compareTo(BigDecimal.ZERO) > 0) {
+
+            discountPercent = discountAmount
+                    .multiply(BigDecimal.valueOf(100))
+                    .divide(marketPrice, 2, RoundingMode.HALF_UP);
+
+            sellingPrice = marketPrice.subtract(discountAmount);
+        }
+
+        product.setMarketPrice(marketPrice);
+        product.setSellingPrice(sellingPrice);
+        product.setDiscountPercent(discountPercent);
+        product.setDiscountAmount(discountAmount);
+
+        /*
+         * EXISTING VARIANTS
+         */
+        List<ProductVariant> existingVariants = getProductVariantsByProductId(product.getId());
+
+        Map<UUID, ProductVariant> existingVariantMap =
+                existingVariants.stream()
+                        .collect(Collectors.toMap(ProductVariant::getId,
+                                Function.identity()));
+
+        List<ProductVariant> variantsToSave = new ArrayList<>();
+
+        Set<UUID> requestVariantIds = new HashSet<>();
+
+        int totalQuantity = 0;
+
+        for (ProductVariantDTO variantDTO : request.getVariants()) {
+
+            ProductVariant variant;
+
+            /*
+             * UPDATE EXISTING VARIANT
+             */
+            if (variantDTO.getId() != null) {
+
+                variant = existingVariantMap.get(variantDTO.getId());
+
+                if (variant == null) {
+                    throw new BadRequestException(MyConstants.ERR_MSG_NOT_FOUND + "Variant: " + variantDTO.getId());
+                }
+
+                requestVariantIds.add(variantDTO.getId());
+
+            }
+            /*
+             * NEW VARIANT
+             */
+            else {
+
+                variant = new ProductVariant();
+
+                variant.setProduct(product);
+
+                variant.setSku(generateSku(
+                        product.getCode(),
+                        variantDTO.getColor(),
+                        variantDTO.getSize()));
+            }
+
+            variant.setColor(variantDTO.getColor());
+            variant.setSize(variantDTO.getSize());
+            variant.setQuantity(variantDTO.getQuantity());
+            variant.setAdditionalPrice(variantDTO.getAdditionalPrice());
+            variant.setIsAvailable(variantDTO.getQuantity() > 0);
+
+            totalQuantity += variantDTO.getQuantity();
+
+            variantsToSave.add(variant);
+        }
+
+        /*
+         * DELETE REMOVED VARIANTS
+         */
+        List<ProductVariant> variantsToDelete =
+                existingVariants.stream()
+                        .filter(v -> !requestVariantIds.contains(v.getId()))
+                        .toList();
+
+        if (!variantsToDelete.isEmpty()) {
+            productVariantRepository.deleteAll(variantsToDelete);
+        }
+
+        /*
+         * SAVE UPDATED/NEW VARIANTS
+         */
+        productVariantRepository.saveAll(variantsToSave);
+
+        product.setQuantity(totalQuantity);
+
+        Product updatedProduct = productRepository.save(product);
+
+        request.setSellingPrice(updatedProduct.getSellingPrice());
+        request.setQuantity(updatedProduct.getQuantity());
+
+        return request;
+    }
+
+    @Override
+//    @Cacheable(
+//            value = "product-pages",
+//            key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
+//    )
     public Page<ProductDTO> getAllProducts(Pageable pageable) {
         return productRepository.getAllProducts(pageable);
     }
 
     @Override
+    @Cacheable(value = "products", key = "#productId")
     public ProductDTO getProduct(UUID productId) {
 
         ProductDTO productDTO = getProductDTOById(productId);
@@ -284,6 +435,10 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "products", key = "#id"),
+            @CacheEvict(value = "product-pages", allEntries = true)
+    })
     public void deleteProduct(UUID id) {
         Product product = getProductById(id);
         product.setStatus(EStatus.DELETED);
@@ -291,6 +446,10 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "products", key = "#id"),
+            @CacheEvict(value = "product-pages", allEntries = true)
+    })
     public void deleteProductHard(UUID id) {   // remaining to delete its children
         Product product = getProductById(id);
         productRepository.delete(product);
@@ -307,8 +466,8 @@ public class ProductServiceImpl implements IProductService {
         return productVariantRepository.getProductVariantsByProductId(productId);
     }
 
-    public List<ProductVariant> getProductVariantsByProductId(UUID id) {
-        return productVariantRepository.findAllByProductId(id);
+    public List<ProductVariant> getProductVariantsByProductId(UUID productId) {
+        return productVariantRepository.findAllByProductId(productId);
     }
 
     @Override
