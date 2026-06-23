@@ -20,6 +20,8 @@ import com.ravi.orbit.service.IUserService;
 import com.ravi.orbit.utils.CommonMethods;
 import com.ravi.orbit.utils.MyConstants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -48,6 +50,10 @@ public class OrderServiceImpl implements IOrderService {
     private final ProductRepository productRepository;
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = "products", key = "#id"),
+//            @CacheEvict(value = "product-pages", allEntries = true)
+    })
     public OrderDTO createOrder(OrderDTO request) {
 
         User customer = userService.getUserPrincipal();

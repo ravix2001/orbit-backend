@@ -12,11 +12,11 @@ import java.util.UUID;
 
 public interface IProductService {
 
-//    ProductDTO handleProduct(ProductDTO productDTO);
-
     void createProducts(List<ProductDTO> requests);
 
     ProductDTO createProduct(ProductDTO request);
+
+    ProductDTO updateProduct(ProductDTO request);
 
     Page<ProductDTO> getAllProducts(Pageable pageable);
 
