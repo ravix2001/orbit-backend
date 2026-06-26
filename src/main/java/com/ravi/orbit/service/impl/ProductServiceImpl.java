@@ -444,7 +444,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     @Caching(evict = {
             @CacheEvict(value = "products", key = "#id"),
-            @CacheEvict(value = "product-pages", allEntries = true)
+//            @CacheEvict(value = "product-pages", allEntries = true)
     })
     public void deleteProduct(UUID id) {
         Product product = getProductById(id);
@@ -455,7 +455,7 @@ public class ProductServiceImpl implements IProductService {
     @Override
     @Caching(evict = {
             @CacheEvict(value = "products", key = "#id"),
-            @CacheEvict(value = "product-pages", allEntries = true)
+//            @CacheEvict(value = "product-pages", allEntries = true)
     })
     public void deleteProductHard(UUID id) {   // remaining to delete its children
         Product product = getProductById(id);
