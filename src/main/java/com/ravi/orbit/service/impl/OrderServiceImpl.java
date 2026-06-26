@@ -51,7 +51,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = "products", key = "#id"),
+            @CacheEvict(value = "products", key = "#request.productId"),
 //            @CacheEvict(value = "product-pages", allEntries = true)
     })
     public OrderDTO createOrder(OrderDTO request) {
