@@ -28,11 +28,11 @@ public class OrderItem extends UIDBase {
     /*
      * PRODUCT
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "product_id")
+//    private Product product;
 
-    @Column(name = "product_id", insertable = false, updatable = false)
+    @Column(name = "product_id", nullable = false)
     private UUID productId;
 
     @Column(name = "product_name")
@@ -44,11 +44,11 @@ public class OrderItem extends UIDBase {
     /*
      * VARIANT INFO
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "variant_id")
-    private ProductVariant variant;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "variant_id")
+//    private ProductVariant variant;
 
-    @Column(name = "variant_id", insertable = false, updatable = false)
+    @Column(name = "variant_id", nullable = false)
     private UUID variantId;
 
     /*

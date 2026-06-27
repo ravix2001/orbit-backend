@@ -102,9 +102,9 @@ public class CartServiceImpl implements ICartService {
 
             cartItem.setCart(cart);
 
-            cartItem.setProduct(variant.getProduct());
+            cartItem.setProductId(variant.getProductId());
 
-            cartItem.setVariant(variant);
+            cartItem.setVariantId(variant.getId());
 
             cartItem.setQuantity(request.getQuantity());
 
@@ -148,9 +148,9 @@ public class CartServiceImpl implements ICartService {
          */
         for (CartItem cartItem : cartItems) {
 
-            Product product = cartItem.getProduct();
+            Product product = productService.getProductById(cartItem.getProductId());
 
-            ProductVariant variant = cartItem.getVariant();
+            ProductVariant variant = productService.getProductVariantById(cartItem.getVariantId());
 
             BigDecimal basePrice =
                     product.getSellingPrice() != null ? product.getSellingPrice() : BigDecimal.ZERO;

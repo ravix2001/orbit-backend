@@ -160,13 +160,13 @@ public class OrderServiceImpl implements IOrderService {
 
             orderItem.setOrder(order);
 
-            orderItem.setProduct(product);
+            orderItem.setProductId(product.getId());
 
             orderItem.setProductName(product.getName());
 
             orderItem.setProductImage(product.getImageUrl());
 
-            orderItem.setVariant(variant);
+            orderItem.setVariantId(variant.getId());
 
             orderItem.setSeller(product.getSeller());
 
@@ -378,7 +378,7 @@ public class OrderServiceImpl implements IOrderService {
 
         User seller = item.getSeller();
 
-        ProductVariantDTO variantDTO = productService.getProductVariantDTOById(item.getVariant().getId());
+        ProductVariantDTO variantDTO = productService.getProductVariantDTOById(item.getVariantId());
 
         OrderItemDTO dto = new OrderItemDTO();
 
