@@ -37,7 +37,7 @@ public class OrderController {
     }
 
     @GetMapping(params = "orderNumber")
-    public ResponseEntity<OrderDTO> getOrderById(@RequestParam Long orderNumber){
+    public ResponseEntity<OrderDTO> getOrderByOrderNumber(@RequestParam Long orderNumber){
         return ResponseEntity.ok(orderService.getOrderByOrderNumber(orderNumber));
     }
 
