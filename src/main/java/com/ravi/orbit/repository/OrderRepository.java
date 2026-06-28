@@ -32,14 +32,16 @@ public interface OrderRepository extends JpaRepository<Order, UUID> {
             " o.totalDiscount, o.totalAmount, o.orderStatus, o.orderDate, o.deliveryDate, " +
             " o.customerId, o.customerName, o.customerPhone, o.customerImage) " +
             " FROM Order o " +
-            " WHERE o.customerId = :customerId ")
+            " WHERE o.customerId = :customerId " +
+            " ORDER BY o.orderDate DESC "   )
     Page<OrderDTO> getOrdersByCustomerId(UUID customerId, Pageable pageable);
 
     @Query("SELECT DISTINCT new com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalAmount, o.orderStatus, " +
             " o.orderDate, o.deliveryDate, o.customerId, o.customerName, o.customerPhone, o.customerImage) " +
             " FROM OrderItem oi " +
             " JOIN oi.order o " +
-            " WHERE oi.sellerId = :sellerId ")
+            " WHERE oi.sellerId = :sellerId " +
+            " ORDER BY o.orderDate DESC ")
     Page<OrderDTO> getOrdersBySellerId(UUID sellerId, Pageable pageable);
 
 //    @Query(" SELECT NEW com.ravi.orbit.dto.OrderDTO(o.id, o.orderNumber, o.totalItems, o.totalMarketPrice, " +
