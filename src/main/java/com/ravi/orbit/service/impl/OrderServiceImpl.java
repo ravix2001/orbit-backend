@@ -51,7 +51,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = "products", key = "#id"),
+            @CacheEvict(value = "products", key = "#request.productId"),
 //            @CacheEvict(value = "product-pages", allEntries = true)
     })
     public OrderDTO createOrder(OrderDTO request) {
@@ -160,13 +160,13 @@ public class OrderServiceImpl implements IOrderService {
 
             orderItem.setOrder(order);
 
-            orderItem.setProduct(product);
+            orderItem.setProductId(product.getId());
 
             orderItem.setProductName(product.getName());
 
             orderItem.setProductImage(product.getImageUrl());
 
-            orderItem.setVariant(variant);
+            orderItem.setVariantId(variant.getId());
 
             orderItem.setSeller(product.getSeller());
 
@@ -300,13 +300,17 @@ public class OrderServiceImpl implements IOrderService {
         return orderRepository.getOrdersBySellerId(sellerId, pageable);
     }
 
-    @Transactional
+    @Override
     public void confirmOrder(UUID orderId) {
 
         Order order = getOrderById(orderId);
 
+        if (order.getOrderStatus() == EOrderStatus.CONFIRMED) {
+            throw new BadRequestException("Order already confirmed");
+        }
+
         if (order.getOrderStatus() != EOrderStatus.PLACED) {
-            throw new BadRequestException("Only placed orders can be confirmed");
+            throw new BadRequestException("Only placed order can be confirmed");
         }
 
         order.setOrderStatus(EOrderStatus.CONFIRMED);
@@ -315,13 +319,18 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     // todo: cancelling the order updates the quantity in the stock
+    // from  seller side
     @Override
     public void cancelOrder(UUID orderId) {
 
         Order order = getOrderById(orderId);
 
+        if (order.getOrderStatus() == EOrderStatus.CANCELLED) {
+            throw new BadRequestException("Order already cancelled");
+        }
+
         if (order.getOrderStatus() != EOrderStatus.PLACED) {
-            throw new BadRequestException("Only placed orders can be cancelled");
+            throw new BadRequestException("Only placed order can be cancelled");
         }
 
         order.setOrderStatus(EOrderStatus.CANCELLED);
@@ -378,7 +387,7 @@ public class OrderServiceImpl implements IOrderService {
 
         User seller = item.getSeller();
 
-        ProductVariantDTO variantDTO = productService.getProductVariantDTOById(item.getVariant().getId());
+        ProductVariantDTO variantDTO = productService.getProductVariantDTOById(item.getVariantId());
 
         OrderItemDTO dto = new OrderItemDTO();
 

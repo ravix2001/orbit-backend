@@ -23,18 +23,18 @@ public class CartItem extends UIDBase {
     @Column(name = "cart_id", insertable = false, updatable = false)
     private UUID cartId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "product_id", referencedColumnName = "id")
+//    private Product product;
 
-    @Column(name = "product_id", insertable = false, updatable = false)
+    @Column(name = "product_id", nullable = false)
     private UUID productId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "variant_id")
-    private ProductVariant variant;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "variant_id")
+//    private ProductVariant variant;
 
-    @Column(name = "variant_id", insertable = false, updatable = false)
+    @Column(name = "variant_id", nullable = false)
     private UUID variantId;
 
 }
