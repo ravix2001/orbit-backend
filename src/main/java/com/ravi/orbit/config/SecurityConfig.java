@@ -36,8 +36,11 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
 
+                        // ===== PUBLIC ACTUATOR HEALTH =====
+                                .requestMatchers("/actuator/health").permitAll()
                         // ===== ADMIN ONLY =====
                         .requestMatchers(
+                                "/actuator/**",
                                 "/api/admin/**",
                                 "/api/categories/handleCategory",
                                 "/api/categories/deleteCategory/**",
